@@ -135,8 +135,16 @@ def _compute_model_cost(
 ) -> float:
     """Compute estimated USD cost for a model using the PRICING table."""
     rates = _resolve_pricing(model_name)
+    # Providers report input_tokens INCLUSIVE of the cached figures (the OpenAI chat
+    # API's prompt_tokens already counts prompt_tokens_details.cached_tokens), so the
+    # input rate applies only to the uncached remainder — otherwise every cached token
+    # is billed twice, once here and once in its own term below. max(0, ...) is a guard
+    # against a malformed usage row, not a rounding choice: it makes such a row
+    # under-report rather than produce a negative cost that silently offsets other
+    # models in the same summary. (ADR-024 §D1.)
+    uncached_input = max(0, input_tokens - cache_read_tokens - cache_write_tokens)
     return (
-        input_tokens * rates.get("input", 0.0)
+        uncached_input * rates.get("input", 0.0)
         + output_tokens * rates.get("output", 0.0)
         + cache_read_tokens * rates.get("cache_read", 0.0)
         + cache_write_tokens * rates.get("cache_write", 0.0)
