@@ -1,13 +1,19 @@
 name: Release
 
-# Manual release: reads version from pyproject.toml on master, tags master HEAD,
-# builds the wheel, and creates a GitHub Release with the wheel attached.
+# Manual release: reads version from pyproject.toml on the dispatched ref, tags
+# that ref's HEAD, builds the wheel, and creates a GitHub Release with the wheel
+# attached.
 #
-# Bumping the version is a separate maintainer action via a normal PR. This
-# workflow does NOT push commits to master — branch protection blocks that.
-# The release flow is therefore two-step:
-#   1. Open a "chore: bump version to X.Y.Z" PR; merge it.
-#   2. Trigger this workflow from the Actions tab.
+#   gh workflow run release.yml -R b12consulting/akgentic-llm --ref <branch>
+#
+# The branch is the dispatch ref, not a workflow input — workflow_dispatch
+# already loads this file from the ref it runs on, so the tree released always
+# matches the workflow that released it. Do NOT reintroduce a hardcoded `ref:`
+# on the checkout below: it releases that branch whatever you dispatched on,
+# silently, which is how a maintenance branch gets tagged with mainline code.
+#
+# Version bumps are a separate PR against the release branch; this workflow
+# never pushes commits — branch protection blocks that.
 
 on:
   workflow_dispatch:
@@ -18,10 +24,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout master
+      - name: Checkout dispatched ref
         uses: actions/checkout@v6
         with:
-          ref: master
           fetch-depth: 0
 
       - name: Install uv
@@ -48,7 +53,7 @@ jobs:
             exit 1
           fi
 
-      - name: Tag master HEAD
+      - name: Tag dispatched ref HEAD
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |

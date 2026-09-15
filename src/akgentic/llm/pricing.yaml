@@ -47,20 +47,130 @@ gpt-4o-mini:
   cache_write: 0.15
 
 # OpenAI — GPT-5 family
+#
+# Every flagship carries the siblings that contain its key as a substring: the matcher in
+# _resolve_pricing scans keys longest-first, so a flagship listed without its cheaper
+# siblings silently bills them at its own rate. Note that "gpt-5.1-mini" does NOT contain
+# "gpt-5-mini" — the ".1" breaks the substring — so it needs its own row, as does
+# "gpt-5.1-codex-mini", which is the same model under its other upstream id.
+#
+# cache_write equal to input is deliberate, not filler: the reference publishes no separate
+# cache-write rate for these models because a cache write bills at the ordinary input rate.
+# The three GPT-5.6 rows below carry a genuine 1.25x surcharge instead.
 gpt-5:
-  input: 2.0
-  output: 8.0
-  cache_read: 0.50
-  cache_write: 2.0
+  input: 1.25
+  output: 10.0
+  cache_read: 0.125
+  cache_write: 1.25
 
 gpt-5-mini:
-  input: 0.40
-  output: 1.60
-  cache_read: 0.10
-  cache_write: 0.40
+  input: 0.25
+  output: 2.0
+  cache_read: 0.025
+  cache_write: 0.25
+
+gpt-5-nano:
+  input: 0.05
+  output: 0.4
+  cache_read: 0.005
+  cache_write: 0.05
+
+gpt-5-pro:
+  input: 15.0
+  output: 120.0
+  cache_read: 15.0
+  cache_write: 15.0
+
+gpt-5.1:
+  input: 1.25
+  output: 10.0
+  cache_read: 0.125
+  cache_write: 1.25
+
+gpt-5.1-mini:
+  input: 0.25
+  output: 2.0
+  cache_read: 0.025
+  cache_write: 0.25
+
+gpt-5.1-codex-mini:
+  input: 0.25
+  output: 2.0
+  cache_read: 0.025
+  cache_write: 0.25
 
 gpt-5.2:
+  input: 1.75
+  output: 14.0
+  cache_read: 0.175
+  cache_write: 1.75
+
+gpt-5.2-pro:
+  input: 21.0
+  output: 168.0
+  cache_read: 21.0
+  cache_write: 21.0
+
+gpt-5.3:
+  input: 1.75
+  output: 14.0
+  cache_read: 0.175
+  cache_write: 1.75
+
+gpt-5.4:
+  input: 2.5
+  output: 15.0
+  cache_read: 0.25
+  cache_write: 2.5
+
+gpt-5.4-mini:
+  input: 0.75
+  output: 4.5
+  cache_read: 0.075
+  cache_write: 0.75
+
+gpt-5.4-nano:
+  input: 0.2
+  output: 1.25
+  cache_read: 0.02
+  cache_write: 0.2
+
+gpt-5.4-pro:
+  input: 30.0
+  output: 180.0
+  cache_read: 30.0
+  cache_write: 30.0
+
+gpt-5.5:
+  input: 5.0
+  output: 30.0
+  cache_read: 0.5
+  cache_write: 5.0
+
+gpt-5.5-pro:
+  input: 30.0
+  output: 180.0
+  cache_read: 30.0
+  cache_write: 30.0
+
+# OpenAI — GPT-5.6 family
+#
+# Upstream ships only the three named variants; there is no bare "gpt-5.6" model.
+# cache_write here is a real 1.25x surcharge above the input rate, not a copy of it.
+gpt-5.6-luna:
+  input: 0.2
+  output: 1.2
+  cache_read: 0.02
+  cache_write: 0.25
+
+gpt-5.6-sol:
+  input: 4.0
+  output: 20.0
+  cache_read: 0.4
+  cache_write: 5.0
+
+gpt-5.6-terra:
   input: 2.0
-  output: 8.0
-  cache_read: 0.50
-  cache_write: 2.0
+  output: 12.0
+  cache_read: 0.2
+  cache_write: 2.5

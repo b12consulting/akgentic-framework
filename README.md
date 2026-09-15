@@ -425,14 +425,55 @@ summaries using `aggregate_usage()`.
 
 ### Pricing Table
 
-Model pricing is externalized in `pricing.yaml` (bundled with the package). It covers
-Anthropic (Claude Sonnet 4, Claude Opus 4) and OpenAI (GPT-4.1 family, GPT-4o family,
-GPT-5 family) with per-1M-token rates for `input`, `output`, `cache_read`, and
-`cache_write`. The table is loaded once at import time into the `PRICING` dict.
+Model pricing is externalized in `pricing.yaml` (bundled with the package), loaded once at
+import time into the `PRICING` dict. It carries **26 rows**: Anthropic (Claude Sonnet 4,
+Claude Opus 4), the OpenAI GPT-4o and GPT-4.1 families, the GPT-5 line through `gpt-5.5` with
+its `-mini`, `-nano`, `-pro` and `-codex-mini` siblings, and the GPT-5.6 family (`luna`,
+`sol`, `terra`). Every row carries per-1M-token rates for `input`, `output`, `cache_read`,
+and `cache_write`.
+
+**The input rate applies to the uncached remainder, not to `input_tokens`.** Providers report
+`input_tokens` *inclusive* of the cached figures — the OpenAI chat API's `prompt_tokens`
+already counts `prompt_tokens_details.cached_tokens` — so applying the input rate to the whole
+of it would bill every cached token a second time, once there and once in its own term:
+
+```
+cost = ( max(0, input − cache_read − cache_write) × input_rate
+       + output       × output_rate
+       + cache_read   × cache_read_rate
+       + cache_write  × cache_write_rate ) / 1_000_000
+```
+
+`max(0, …)` is a **guard** against a malformed usage row, not a rounding choice: it makes such
+a row under-report rather than produce a negative cost that silently offsets other models in
+the same summary.
+
+`cache_write` equal to `input` in most OpenAI rows is deliberate rather than filler — those
+providers bill a cache write at the ordinary input rate, and the two terms then cancel to
+`(input − cache_read) × input_rate`. The three GPT-5.6 rows carry a genuine 1.25× surcharge
+instead.
+
+Each rate is a single scalar, so the table always charges the **base tier**; long-context
+tiers are deliberately not modelled (ADR-024 §D3 records the condition under which that is
+worth revisiting).
+
+> **Corrected on this release line.** The previous implementation applied the input rate to
+> the whole of `input_tokens`, billing each cached token twice. Figures it produced were
+> overstatements — **3.18×** on a measured `gpt-5.4` turn (50 000 input tokens of which 43 000
+> were cache reads, 800 output), and more at higher cache hit rates. Reported costs therefore
+> **step down** wherever caching is active once this version is deployed.
 
 Pricing resolution uses substring matching against model names (longest key first), so
 versioned names like `"claude-sonnet-4-20250514"` match the `"claude-sonnet-4-20250514"`
-key, and `"gpt-4.1-mini-2025-12-11"` matches `"gpt-4.1-mini"` before `"gpt-4.1"`.
+key, `"gpt-4.1-mini-2025-12-11"` matches `"gpt-4.1-mini"` before `"gpt-4.1"`, `"gpt-5.4"`
+resolves to the `gpt-5.4` row rather than to `gpt-5`, and `"gpt-5.4-mini"` to its own row
+rather than to the flagship.
+
+**Adding a row means adding the whole family.** Because the longest key wins, a flagship added
+without its cheaper siblings silently bills them at the flagship's rate: `gpt-5.4-mini`
+contains `gpt-5.4`, so with its own row missing it matches the flagship — and there is no
+unknown-model signal, because a row *was* found. For each new key, ask which real model ids
+contain it as a substring, and price every one of them.
 
 ### Aggregation
 
@@ -560,7 +601,8 @@ src/akgentic/llm/
                     #   ToolCallEvent, ToolReturnEvent, ContextObserver protocol
     pricing.py      # PRICING dict, ModelUsage, RunUsageSummary, AgentUsageSummary,
                     #   aggregate_usage()
-    pricing.yaml    # Externalized per-1M-token pricing table (Anthropic + OpenAI)
+    pricing.yaml    # Externalized per-1M-token pricing table — Anthropic plus the
+                    #   OpenAI GPT-4o, GPT-4.1, GPT-5 and GPT-5.6 lines
     prompts.py      # PromptTemplate, current_datetime_prompt, json_output_reminder_prompt
     providers.py    # create_model(), create_http_client(), get_output_type(),
                     #   create_model_settings(), _supports_native_output()

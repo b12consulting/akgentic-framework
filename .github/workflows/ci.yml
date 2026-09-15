@@ -3,7 +3,11 @@ name: CI
 on:
   push:
   pull_request:
-    branches: [master]
+    # version-1.3.x only. For pull_request GitHub loads the workflow from the
+    # BASE branch, so a PR targeting master runs master's ci.yml, never this
+    # file — listing master here would be dead config implying a trigger that
+    # cannot fire.
+    branches: [version-1.3.x]
   workflow_dispatch:
 
 env:
@@ -13,18 +17,8 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout workspace
+      - name: Checkout akgentic-llm
         uses: actions/checkout@v6
-        with:
-          repository: b12consulting/akgentic-quick-start
-          submodules: recursive
-          token: ${{ secrets.GH_PAT }}
-
-      - name: Override akgentic-llm submodule with current branch
-        working-directory: packages/akgentic-llm
-        run: |
-          git fetch origin ${{ github.head_ref || github.ref_name }}
-          git checkout FETCH_HEAD
 
       - name: Install uv
         uses: astral-sh/setup-uv@v8.1.0
@@ -34,18 +28,23 @@ jobs:
       - name: Set up Python 3.12
         run: uv python install 3.12
 
-      - name: Install dependencies
-        run: uv sync --all-packages --all-extras
+      - name: Create virtual environment
+        run: uv venv
 
+      - name: Install dependencies
+        run: uv pip install -e ".[dev]"
+
+      # --no-sync: run in the venv built above without re-resolving from a
+      # lockfile (there is no project lockfile in this install model).
       - name: Type checking
-        run: uv run mypy packages/akgentic-llm/src/
+        run: uv run --no-sync mypy src/
 
       - name: Linting
-        run: uv run ruff check packages/akgentic-llm/src/
+        run: uv run --no-sync ruff check src/
 
       - name: Run tests with coverage
         run: >
-          uv run pytest packages/akgentic-llm/tests/
+          uv run --no-sync pytest tests/
           --cov=akgentic.llm
           --cov-report=term-missing
           --cov-report=json:coverage.json
@@ -53,6 +52,8 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
+      # Deliberately master-only: the badge gist reflects the mainline, and a
+      # 1.3.x push must not overwrite it. This step is inert on this branch.
       - name: Update coverage badge
         if: github.ref_name == 'master' && github.event_name == 'push'
         run: |
