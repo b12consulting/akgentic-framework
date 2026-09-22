@@ -24,15 +24,14 @@ payload:
     prompt:
       __ref__: id_qa_prompt
     model_cfg:
-      __ref__: global.id_gpt_52
+      __ref__: global.id_gpt_56_luna
     run_usage_limits:
       __ref__: id_run_limits_specialist
     agent_usage_limits:
       __ref__: id_agent_limits_specialist
     tools:
     - __ref__: id_workspace_dev
-    - __ref__: id_exec
     - __ref__: id_knowledge_graph_ro
     - __ref__: id_team_specialist
-    - __ref__: id_vector_store
     - __ref__: id_planning_member
+    - __ref__: software-engineering-skills.id_skills_qa

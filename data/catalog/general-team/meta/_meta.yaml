@@ -70,7 +70,7 @@ payload:
         the whole of the researcher's value. Its token budget is raised to match, because one
         fetch is ~24k tokens and stays in context all turn. @Skeptic gets search (to refute)
         with fetch OFF. @Explorer and @Quant get none.
-      ExecTool - @Quant only. Sandboxed Python: the difference between "roughly a few million"
+      WorkspaceTool workspace_exec - @Quant only. Sandboxed Python: the difference between "roughly a few million"
         and an actual number with assumptions attached.
       KnowledgeGraphTool - read/write for @Generalist, read-only for the rest.
       TeamTool - explicit per-tier cards, never the auto-injected default. Everyone sees the

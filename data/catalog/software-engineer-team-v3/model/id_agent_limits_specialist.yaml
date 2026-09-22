@@ -7,4 +7,4 @@ description: Lifetime budget for a specialist, bounding a whole session even whe
   every individual run stays under its own cap.
 payload:
   agent_request_limit: 40
-  total_tokens_limit: 300000
+  total_tokens_limit: 1000000

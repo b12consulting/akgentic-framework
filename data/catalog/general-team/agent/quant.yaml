@@ -33,8 +33,6 @@ payload:
     agent_usage_limits:
       __ref__: id_agent_limits_member
     tools:
-    - __ref__: id_exec
     - __ref__: id_workspace_quant
     - __ref__: id_knowledge_graph_ro
     - __ref__: id_team_member
-    - __ref__: id_vector_store

@@ -2,7 +2,64 @@ namespace: agent-team
 user_id: anonymous
 name: Agent Team V1
 description: Manager coordinating Assistant, Expert and Support Human agents team!
-properties: {}
+properties:
+  overview: |
+    Agent Team V1 with runtime model switching. @Manager, @Assistant and @Expert each carry a
+    three-model roster and the ModelTool card, so the model can be changed mid-session by a
+    human command or by the agent itself, and the choice survives a restart.
+  models: |
+    Roster on all three LLM agents: openai:gpt-5.2 (ACTIVE), openai:gpt-5.4, openai:gpt-4.1.
+    @Assistant and @Expert previously ran gpt-4.1 and now start on gpt-5.2, with gpt-4.1 still
+    reachable by switching.
+    THE ROSTER ITSELF IS ONE SHARED GLOBAL ENTRY: global.id_model_roster_agent_team, a
+    NativeValue carrying a list of three refs to global.id_gpt_*. All three agents point
+    model_roster at that single ref, so the roster is declared once for the team rather than
+    repeated per agent — add or drop a model there and every agent follows. The trade is that
+    there is no per-agent subsetting left: the roster is now team-wide by construction.
+    A NativeValue is how a whole LIST becomes ref-addressable. The resolver populates the
+    NativeValue's payload first, in ITS OWN namespace (which is why its inner refs are written
+    bare — id_gpt_54, not global.id_gpt_54), so each element arrives as a real ModelConfig; it
+    then unwraps the wrapper and splices the bare list into AgentConfig.model_roster.
+    model_cfg stays per-agent and is still declared BY REF to a global.id_gpt_* entry: the
+    roster is the set an agent may switch between, model_cfg is the one in force, and it must be
+    one of the roster's three or ReactAgentConfig refuses the config. global.id_gpt_41's
+    temperature=0.3 arrives intact through both, which is what proves the refs resolve rather
+    than coerce.
+    A single ref in the model_roster POSITION is safe — verify it anyway (below). What is lost
+    through the catalog is only the model_cfg-as-a-list union shorthand:
+    DECLARE model_cfg AND model_roster AS SEPARATE FIELDS. Do NOT use the model_cfg-as-a-list
+    shorthand. AgentConfig accepts a list at the input boundary and normalizes it into
+    model_cfg + model_roster, but that normalization is LOST through the catalog — the list form
+    (refs OR literal configs alike) round-trips with model_roster EMPTY, returning 201 with
+    validate ok:true and no error anywhere. Refs themselves are fine: they resolve correctly in
+    model_cfg (single) and in model_roster (list). It is only the union shorthand that is lost.
+    VERIFY BY CHECKING THE ROSTER IS NON-EMPTY in /admin/catalog/team/agent-team/resolve.
+    Never verify by reading the active model: gpt-5.2 is ALSO ModelConfig's built-in default
+    (provider=openai, model=gpt-5.2), so "active is gpt-5.2" is indistinguishable from the
+    config having been dropped entirely.
+  tools: |
+    id_model_switch (ModelTool) is on the three LLM agents and on neither HumanProxy — @Human
+    and @Support have no model and no tools, so a roster there would mean nothing. ModelTool is
+    NOT auto-injected by BaseAgent (only TeamTool and MailboxTool are); an agent has it only
+    because this file says so.
+    instructions are set on switch_model ONLY. They are honoured on switch_model and
+    list_models, but are a SILENT NO-OP on active_model, which is an LLM_CONTEXT provider
+    returning a ContextState rather than a docstring.
+  flow: |
+    active_model publishes the model in force as an LLM_CONTEXT delta block every turn, so an
+    agent always knows what it is running on without calling anything. switch_model and
+    list_models are on TOOL_CALL and COMMAND: a human types /switch_model model=openai:gpt-5.4,
+    and the model can call the same capability itself. The parameter is `model`, not `key` —
+    /switch_model key=... does NOT error, the whole token binds positionally to `model` and is
+    refused downstream as an unknown roster key. A switch takes effect on the NEXT run, not the
+    one in flight, and does not sanitize history.
+  limits: |
+    Unchanged. A switch does not reset the usage accumulators or the run counter — they survive
+    a switch by design.
+  lineage: |
+    Adds runtime model switching to Agent Team V1. Requires akgentic-tool epic 36 (ModelTool,
+    merged), akgentic-llm epic 22 (roster + switch_model) and akgentic-agent epic 22 (the
+    observer and restore).
 shareable: false
 public: true
 entries:
@@ -28,12 +85,14 @@ entries:
             __ref__: assistant
         - card:
             __ref__: human_support
-      message_types:
-      - __type__: akgentic.agent.messages.AgentMessage
       agent_profiles:
       - __ref__: expert
       - __ref__: assistant
       - __ref__: human_support
+      message_types:
+      - __type__: akgentic.agent.messages.AgentMessage
+      metadata_type:
+        __type__: akgentic.team.reference_metadata.ReferenceTeamMetadata
 
   #### ─── Agents ───────────────────────────────────────────────────────── ####
   assistant:
@@ -56,14 +115,17 @@ entries:
             role: assistant
             instructions: Provide clear and accurate information.
         model_cfg:
-          __ref__: global.id_gpt_41
+          __ref__: global.id_gpt_54
+        model_roster:
+          __ref__: global.id_model_roster_agent_team
         tools:
-        - __ref__: global.id_vector_store
         - __ref__: global.id_web_search
         - __ref__: global.id_planning
         - __ref__: global.id_workspace
         - __ref__: global.id_knowledge_graph
         - __ref__: global.id_notification
+        - __ref__: global.id_metadata
+        - __ref__: id_model_switch
 
   expert:
     kind: agent
@@ -86,13 +148,16 @@ entries:
             instructions: Provide deep specialized knowledge.
         model_cfg:
           __ref__: global.id_gpt_41
+        model_roster:
+          __ref__: global.id_model_roster_agent_team
         tools:
-        - __ref__: global.id_vector_store
         - __ref__: global.id_web_search
         - __ref__: global.id_planning
         - __ref__: global.id_workspace
         - __ref__: global.id_knowledge_graph
         - __ref__: global.id_notification
+        - __ref__: global.id_metadata
+        - __ref__: id_model_switch
 
   human_proxy:
     kind: agent
@@ -139,13 +204,17 @@ entries:
             instructions: Coordinate the team effectively to achieve goals.
         model_cfg:
           __ref__: global.id_gpt_52
+        model_roster:
+          __ref__: global.id_model_roster_agent_team
         tools:
-        - __ref__: global.id_vector_store
         - __ref__: global.id_web_search
         - __ref__: global.id_planning
         - __ref__: global.id_workspace
         - __ref__: global.id_knowledge_graph
         - __ref__: global.id_notification
+        - __ref__: global.id_metadata
+        - __ref__: id_model_switch
+        - __ref__: global.id_skills_deliverables
 
   #### ─── Prompts ──────────────────────────────────────────────────────── ####
   id_team_template:
@@ -155,6 +224,24 @@ entries:
     payload:
       value: "You are a helpful {role}. \n{instructions}"
 
+  #### ─── Tools ────────────────────────────────────────────────────────── ####
+  id_model_switch:
+    kind: tool
+    model_type: akgentic.tool.model.ModelTool
+    description: Runtime model switching — the roster, the switch, and the model in
+      force
+    payload:
+      list_models: true
+      switch_model:
+        instructions: |
+          The roster is gpt-5.2 (active by default), gpt-5.4 and gpt-4.1. Escalate to gpt-5.4
+          for a task needing deeper reasoning than the one in front of you is getting; drop to
+          gpt-4.1 for bulk or routine work. Say which model you switched to and why, so the
+          change is visible rather than silent.
+          The parameter is `model` and takes the whole roster key:
+          switch_model(model="openai:gpt-5.4").
+      active_model: true
+
   #### ─── Tools (External ref, readonly) ───────────────────────────────── ####
 
   global.id_knowledge_graph:
@@ -162,6 +249,23 @@ entries:
     model_type: akgentic.tool.knowledge_graph.KnowledgeGraphTool
     description: Knowledge graph — full read/write access for the manager
     payload: {}
+
+  global.id_metadata:
+    kind: tool
+    model_type: akgentic.tool.metadata.MetadataTool
+    description: Team metadata — renders the team's business context into every agent's
+      frozen system prompt, once, from one operator-written template
+    payload:
+      render_metadata:
+        header: Team context
+        template: |-
+          Tenant: {tenant}
+          Case reference: {case_ref}
+          Service tier: {tier}
+          Note: {note}
+        expose:
+        - command
+        - system_prompt
 
   global.id_notification:
     kind: tool
@@ -185,11 +289,105 @@ entries:
           - Record outputs when tasks are completed.
           - Ensure the plan stays accurate when a tracked task exists.
 
-  global.id_vector_store:
+  global.id_skills_deliverables:
     kind: tool
-    model_type: akgentic.tool.vector_store.VectorStoreTool
-    description: Vector store for retrieval-augmented generation (RAG)
-    payload: {}
+    model_type: akgentic.tool.skill.SkillTool
+    description: Skill library — producing written deliverables (reports, reviews,
+      source summaries)
+    payload:
+      param:
+        skills:
+        - name: write-report
+          description: How to structure a report so the reader gets the answer before
+            the method.
+          content: |
+            A report is read by someone deciding whether to act. Structure it for that reader, not
+            for the order in which you did the work.
+
+            **Lead with the answer.** The first paragraph states what you found and what it means.
+            A reader who stops there should still have the conclusion. Building to a conclusion in
+            the final paragraph is the single most common structural error, and it costs the reader
+            the whole document to recover one sentence.
+
+            **Then the support, strongest first.** Each section makes one claim and gives the
+            evidence for it. If a section does not change what the reader should do, cut it —
+            including work you are proud of.
+
+            **Separate what you know from what you infer.** Mark inference as inference. A reader who
+            cannot tell measurement from estimate will either trust both or neither, and both are
+            wrong.
+
+            **State the limits explicitly.** What you did not check, what data was missing, where the
+            result would change. A report with no stated limits reads as either naive or evasive, and
+            the reader will assume whichever is worse.
+
+            On length: cut every sentence that describes the process rather than the finding.
+            "We analysed the data and found that X" is "X". Numbers belong in tables, not in prose —
+            a sentence with four figures in it is unreadable, and the same four in a table are
+            scannable.
+
+            Finish by re-reading only the opening paragraph. If it does not survive on its own, the
+            report is not done.
+        - name: review-document
+          description: How to review someone else's document so the feedback is actionable
+            rather than a list of reactions.
+          content: |
+            Review in two passes. Mixing them produces a list of typos that misses a wrong argument.
+
+            **First pass — is it right?** Read for the claim and the evidence. Ignore wording
+            entirely. Ask: does the conclusion follow? Is anything asserted that is not supported? Is
+            there a claim that would change the reader's decision if it were wrong, and is that claim
+            adequately supported? Is anything important missing — an alternative not considered, a
+            risk not named, a limit not stated?
+
+            **Second pass — is it clear?** Only once the substance holds. Structure, order,
+            redundancy, wording. There is no point polishing a paragraph that should be deleted.
+
+            **Write findings so they can be acted on.** Each one names the location, states the
+            problem, and says what would resolve it. "This section is confusing" is not actionable;
+            "this section states the conclusion before defining the term it depends on — define it
+            first, or move the definition up" is.
+
+            **Separate severity honestly.** Distinguish what is wrong, what is unclear, and what you
+            would have done differently. The third category is preference, and should be labelled as
+            preference — mixing it with the first two makes a reviewer's whole list easy to dismiss.
+
+            **Say what works, briefly and specifically.** Not to soften the review, but because the
+            author needs to know what not to change while fixing everything else.
+
+            If you find nothing substantive, say so plainly. Manufacturing findings to look thorough
+            wastes the author's time and devalues your real findings on the next review.
+        - name: summarize-source
+          description: How to compress a long source without losing what makes it
+            usable later.
+          content: |
+            A summary is written for a reader who will not open the source. What survives compression
+            determines whether it is useful or merely short.
+
+            **Keep, always:**
+
+            - The claims, with their strength preserved. If the source says "may indicate", do not
+              write "shows". Silently upgrading hedged claims into confident ones is the most common
+              and most damaging summarisation error.
+            - Numbers, with their units and their basis. A figure without its denominator is noise.
+            - Definitions the source relies on, especially where it uses a common word in a narrow
+              way.
+            - Anything that contradicts the source's own conclusion. It is the first thing a careless
+              summary drops and the first thing a careful reader wants.
+
+            **Drop:** worked examples, restatements, throat-clearing, and the source's own summary of
+            itself — which is usually written to persuade rather than to inform.
+
+            **Preserve structure where structure carries meaning.** If the source argues in steps, a
+            summary that reorders them into topics loses the argument. If it is a list of independent
+            findings, the order is free.
+
+            **Record what you dropped, in one line.** "Omits the methodology section and three worked
+            examples." A reader who knows what is missing can decide whether to open the source; one
+            who does not will assume the summary is complete.
+
+            Never resolve an ambiguity on the author's behalf. If the source is unclear on a point
+            that matters, say that it is unclear — that fact is part of what you were asked to report.
 
   global.id_web_search:
     kind: tool
@@ -230,3 +428,35 @@ entries:
     payload:
       provider: openai
       model: gpt-5.2
+
+  global.id_gpt_54:
+    kind: model
+    model_type: akgentic.llm.ModelConfig
+    description: GPT-5.4 via OpenAI — shared model configuration
+    payload:
+      provider: openai
+      model: gpt-5.4
+
+  global.id_model_roster_agent_team:
+    kind: model
+    model_type: akgentic.catalog.NativeValue
+    description: |
+      Switchable model roster for Agent Team V1 — declared ONCE here and shared by @Manager,
+      @Assistant and @Expert, instead of the same three-ref list repeated on every agent.
+      Contents: gpt-5.4 (strongest), gpt-5.2, gpt-4.1 (cheapest, temperature 0.3). Order is
+      listing order only — it does not pick the active model.
+      HOW IT WORKS: a whole LIST is made ref-addressable by wrapping it in a NativeValue, the
+      catalog's sanctioned value carrier. The resolver populates THIS payload first, in THIS
+      namespace, so each element becomes a real ModelConfig; it then unwraps the NativeValue and
+      splices the bare list into the consuming AgentConfig.model_roster. That is why the inner
+      refs are written bare (id_gpt_54), not global-prefixed.
+      EACH AGENT STILL DECLARES ITS OWN model_cfg. The roster is the set an agent may switch
+      between; model_cfg is the one in force, and it must be one of the three below or
+      ReactAgentConfig refuses the config outright.
+      Adding a model here arms it for every agent of the team at once — that is the point, and
+      it is also the risk: there is no per-agent subsetting once the roster is shared.
+    payload:
+      value:
+      - __ref__: id_gpt_54
+      - __ref__: id_gpt_52
+      - __ref__: id_gpt_41

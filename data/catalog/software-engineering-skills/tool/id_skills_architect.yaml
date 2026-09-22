@@ -1,0 +1,13 @@
+id: id_skills_architect
+kind: tool
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillTool
+description: 'Skills for the architect: write-dev-notes, write-findings, edit-the-story, consult-a-peer'
+payload:
+  param:
+    skills:
+    - __ref__: id_skill_write_dev_notes
+    - __ref__: id_skill_write_findings
+    - __ref__: id_skill_edit_the_story
+    - __ref__: id_skill_consult_a_peer

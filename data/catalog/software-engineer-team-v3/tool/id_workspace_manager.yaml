@@ -3,7 +3,8 @@ kind: tool
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.tool.workspace.WorkspaceTool
-description: The manager's workspace — owns work-items/ and report.md, reads the codebase
+description: The manager's workspace — creates the story files from the seeded template,
+  owns backlog.md and report.md, reads the codebase
 payload:
   workspace_delete: false
   workspace_patch: false
@@ -11,18 +12,91 @@ payload:
   workspace_view: false
   workspace_write:
     instructions: |
-      You own work-items/<slug>.md and report.md. They are the handoff between stages and
-      the only durable record of this session.
+      Use this for exactly three things: creating a NEW story file, backlog.md and report.md.
 
-      Append as each stage closes; never rewrite an earlier section. A stage whose output
-      is not written into the work item has NOT closed, and the next stage must not start.
+      A story starts as a copy of stories/_template.md: read the template, fill the number,
+      title and Type, drop the sections its Type does not use, and write it to
+      stories/<n>-<slug>.md. From then on the story is shared - every stage writes its own
+      section into it - so you NEVER workspace_write an existing story. Change it with
+      workspace_edit.
 
-      Before you remove anything from the knowledge graph, copy it into the work item's
-      "Decisions and disagreements" section first. The graph is curated and loses things
-      by design; the work item is what makes that safe.
+      Build report.md by reading the story files, not from memory.
+  workspace_edit:
+    instructions: |
+      Your parts of a story: the Status line (drafted -> ready-for-dev), Tasks, and Notes.
+      Anchor each edit on the section heading. Never change another role's section - if one is
+      wrong, send it back to its owner.
 
-      Build report.md by reading the work items, not from memory.
+      Teammates edit other sections of the same story while you work. If an edit is refused
+      because the file changed since you read it, read it again and redo the edit.
+
+      Before you remove anything from the knowledge graph, copy it into the story's Notes
+      first. The graph is curated and loses things by design; the story is what makes that safe.
   workspace_read:
     instructions: |
-      Read the work item before dispatching a stage - it is what the specialist will be
-      working from, and if it is thin their answer will be too.
+      Read the story before dispatching a task - it is what the specialist will be working
+      from, and if it is thin their answer will be too. A task whose section is still empty
+      has NOT closed, and what depends on it must not start.
+  resources:
+  - file_name: stories/_template.md
+    content: |
+      # Story {n} — {title}
+
+      **Status:** drafted · **Type:** {implementation or analysis}
+
+      <!-- Status: drafted, ready-for-dev, in-progress, review, done.
+           Every heading names its owner: edit only your own sections, with workspace_edit
+           anchored on the heading, and add a line to the Change Log.
+           An analysis story drops Dev Notes, Dev Agent Record and QA Results;
+           an implementation story drops Findings.
+           Never write a bare angle-bracket word: the viewer reads it as HTML. -->
+
+      ## Story — @Analyst
+
+      As a {who}, I want {what}, so that {why}.
+
+      _For an analysis story: the question to answer, and who needs the answer._
+
+      ## Acceptance Criteria — @Analyst
+
+      - **AC1** — {checkable by someone else, without asking}
+
+      **Out of scope:** {what this story deliberately does not do}
+
+      ## Dev Notes — @Architect
+
+      _Approach, the alternative rejected and why, files affected, risks, how to test — with
+      file:line references into the existing code._
+
+      ## Tasks — @Manager
+
+      - [ ] **T1** @{Owner} — {task} (AC 1)
+
+      _Each owner ticks its own task. Review follow-ups are added by @Reviewer as **R1.1**, **R1.2**…_
+
+      ## Findings — task owners
+
+      _One subsection per task — `### T1 · @Owner — task` — with the answer first, then the
+      evidence: file:line, command and output._
+
+      ## Dev Agent Record — @Developer
+
+      - **Files changed:** {every file added, changed or deleted}
+      - **Test runs:** {exact command and real result}
+      - **Deviations from Dev Notes:** {or "none"}
+
+      ## QA Results — @QA
+
+      _Tests added and the AC each proves, the run, what is not covered._
+
+      ## Review — @Reviewer
+
+      _One `### Round N — APPROVE / CHANGES REQUESTED / REJECT` per review, appended._
+
+      ## Notes — anyone
+
+      _Decisions, disagreements and open questions — one line each, signed._
+
+      ## Change Log — anyone
+
+      - @{who} — {what changed}

@@ -1,0 +1,25 @@
+id: id_skill_write_findings
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: write-findings'
+payload:
+  name: write-findings
+  description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-findings`. BMAD analysis
+    story: write your result into Findings, with evidence, and reply.'
+  content: |
+    An analysis story answers a question and changes no code. Its deliverable is the Findings section.
+
+    1. Add your subsection under `## Findings` with `workspace_edit`:
+       `### T{n} · @{you} — {the task, as written in Tasks}`.
+    2. **Answer first** - two or three lines a reader can stop after. Then the detail.
+    3. **Every claim carries its evidence**: `file:line`, the document and section, or the exact
+       command and its real output. Keep what you verified apart from what you infer, and say which is
+       which. Never describe a run or a read you did not perform.
+    4. **Cover every AC your task is tied to.** One you cannot answer: say why, and what would answer it.
+    5. Append open points to Notes, signed.
+    6. **Tick your task** in Tasks (`- [x] **T{n}** ...`). Leave the Status line to @Manager - it closes
+       an analysis story.
+    7. Reply to @Manager in at most 200 words: the answer, the evidence it rests on, what is still
+       open, and the story path.

@@ -3,23 +3,28 @@ kind: tool
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.tool.workspace.WorkspaceTool
-description: Codebase reading plus a place to write your own analysis. Read anything;
-  write only your own analysis/<task-id>-<role>.md.
+description: Codebase reading plus editing your own sections of the shared story file.
+  Read anything; create nothing; edit only your sections of stories/<n>-<slug>.md.
 payload:
   workspace_delete: false
+  workspace_write: false
   workspace_patch: false
   workspace_multi_edit: false
   workspace_view: false
-  workspace_write:
+  workspace_edit:
     instructions: |-
-      You write ONE path and one only: analysis/<task-id>-<role>.md, the file your dispatch names.
+      You change ONE file: the story your dispatch names, stories/<n>-<slug>.md - and only the
+      sections your role owns. Each section heading in the story says who owns it.
 
-      Never write source code, never write backlog.md or report.md, and never write another
-      specialist's analysis file. workspace_write OVERWRITES - writing someone else's path
-      destroys their work silently, with no error and no way to recover it.
+      Anchor every edit on your section heading or on the placeholder comment under it. Put your
+      full reasoning there - the story is where depth belongs: your reply to @Manager is a
+      summary and the path.
 
-      Put your full reasoning here. This file is where depth belongs: your reply to @Manager is a
-      summary and a path, and the manager reads the file when it needs the detail.
+      The story is shared: teammates edit other sections while you work. If an edit is refused
+      because the file changed since you read it, read it again and redo the edit - nothing of
+      yours or theirs is lost. Add one line to the Change Log for each edit.
+
+      Never edit source code, backlog.md or report.md.
   workspace_grep:
     instructions: |-
       Grep is how you find what already exists. Before asserting something is absent, search for
@@ -27,7 +32,8 @@ payload:
       the boundary, not inside the diff.
   workspace_read:
     instructions: |-
-      Read a file before making a claim about it, and cite file:line when you do.
+      Read a file before making a claim about it, and cite file:line when you do. Read the story
+      in full before you edit it.
 
       If the code you are asked about does not exist yet, two or three probes are enough to
       establish that. Say so and reason from the request instead of hunting further.

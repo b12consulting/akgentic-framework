@@ -7,8 +7,9 @@ description: Turns a request into scoped, testable acceptance criteria and names
   is out of scope.
 payload:
   description: Turns a request into scoped, testable acceptance criteria and names
-    what is out of scope. Reads the codebase with glob and grep, writes its own analysis
-    file, and can search the web. Cannot edit source code and has NO shell.
+    what is out of scope. Reads the codebase with glob and grep, edits its own sections of
+    the story file (Story, Acceptance Criteria, and Findings in analysis stories), and can search the web. 
+    Cannot edit source code and has NO shell. Answers directly, or runs a named workflow.
   agent_class: akgentic.agent.BaseAgent
   skills:
   - requirements
@@ -18,16 +19,18 @@ payload:
   - glob
   - grep
   - web-search
-  - writes-own-analysis
+  - edits-story-sections
   - no-source-edit
   - no-shell
+  - workflow:write-acceptance-criteria
+  - workflow:write-findings
   config:
     name: '@Analyst'
     role: Analyst
     prompt:
       __ref__: id_analyst_prompt
     model_cfg:
-      __ref__: global.id_gpt_52
+      __ref__: global.id_gpt_56_luna
     run_usage_limits:
       __ref__: id_run_limits_specialist
     agent_usage_limits:
@@ -37,5 +40,5 @@ payload:
     - __ref__: id_search_analyst
     - __ref__: id_knowledge_graph_ro
     - __ref__: id_team_specialist
-    - __ref__: id_vector_store
     - __ref__: id_planning_member
+    - __ref__: software-engineering-skills.id_skills_analyst

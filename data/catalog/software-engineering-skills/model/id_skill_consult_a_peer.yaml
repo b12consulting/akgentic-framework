@@ -1,0 +1,41 @@
+id: id_skill_consult_a_peer
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: consult-a-peer'
+payload:
+  name: consult-a-peer
+  description: 'Before you ask a colleague a question: when asking is worth it, how to ask, and the bounds
+    that stop the team looping.'
+  content: |
+    Every consultation costs the team several turns. Ask only when you are **blocked**.
+
+    **First, try yourself.** Read the file, grep its callers, read the story and the graph. Code you
+    can read is not a reason to ask; its behaviour on a given input is usually readable too.
+
+    **Ask when - and only when - the answer is out of your reach:**
+
+    - it needs a **run** and you have no shell (only @Developer, @QA and @Reviewer have one);
+    - it is a **decision another role owns** - the approach (@Architect), what a requirement means
+      (@Analyst);
+    - the story and the code leave a **requirement genuinely ambiguous**, and guessing would change
+      the result.
+
+    Your dispatch's WHO CAN HELP says who holds what, when anyone does. It is not an instruction to
+    ask. If you are blocked and nobody fits, say so in your reply rather than inventing the answer.
+
+    **How:** send the peer a `request` with ONE specific question, and stop. Do not send your answer
+    yet, and do not notify @Manager - the board already shows your task open.
+
+    **When their `response` arrives**, fold it into your work, write what they confirmed or contested
+    into the story (your section, or Notes), then send @Manager your single `response` - naming what
+    the peer confirmed or contested.
+
+    **Bounds:**
+
+    - At most one peer per task - your prompt names yours.
+    - Exactly one `response` to @Manager per task, ever. A position now and an update later makes the
+      manager report twice, once on incomplete work.
+    - Depth 1: when a peer asks *you*, answer in at most 80 words, from evidence, and stop. Never
+      consult anyone about it.

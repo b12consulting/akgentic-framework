@@ -7,7 +7,7 @@ description: Managing engineer running a gated analyse/design/plan/implement/rev
   flow
 payload:
   welcome_message: |
-    ## Software Engineering Team — **v2**
+    ## Software Engineering Team — **v3**
 
     A managing engineer who owns the **workflow**, and four specialists who own the work.
 
@@ -22,9 +22,10 @@ payload:
 
     **How it works**
 
-    - **Stages are gated**, in order: *analyse → design → plan → implement → review*. A stage cannot start until its predecessor's output is written into the work item.
-    - **The work item carries the context.** `work-items/<id>.md` holds the acceptance criteria, the design decision, the numbered tasks, the file list and the review verdict — so the developer never hunts for context and every handoff is a document.
-    - **Specialists consult each other directly.** Each must check with a named peer before certain claims: an analyst cannot judge feasibility, an architect cannot assume the codebase, a developer cannot silently change a design, a reviewer cannot reject against a requirement nobody wrote.
+    - **Ask anything directly.** A question — what does this module do, do the tests pass — goes straight to the specialist who holds the answer, with no process around it.
+    - **Delivery work runs BMAD-style, on request of the manager.** Stages are gated, in order: *analyse → design → plan → implement → review*. A stage cannot start until its predecessor's section is written into the story.
+    - **The story carries the context.** One BMAD-style story file per deliverable, `stories/<n>-<slug>.md` — a bigger request becomes several stories, and a question to answer becomes an *analysis* story with no code. Each story holds the acceptance criteria, the Dev Notes, the numbered tasks, the file list and every review round — each role edits its own section of the same file, so the developer never hunts for context and every handoff is a document.
+    - **Specialists consult each other only when blocked** — a run one of them has no shell for, a decision another role owns. Everything readable in the code, they check themselves.
     - **It asks before it starts.** Expect a couple of short questions: what you want changed, in which codebase, and how far you want it taken.
 
     **@QA** is available but not hired — ask for it when you want tests written and proven rather than reviewed.

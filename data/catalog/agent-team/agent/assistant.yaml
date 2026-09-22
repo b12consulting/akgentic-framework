@@ -24,7 +24,6 @@ payload:
     model_roster:
       __ref__: global.id_model_roster_agent_team
     tools:
-    - __ref__: global.id_vector_store
     - __ref__: global.id_web_search
     - __ref__: global.id_planning
     - __ref__: global.id_workspace

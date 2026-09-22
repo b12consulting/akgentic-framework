@@ -6,7 +6,7 @@ from akgentic.llm import ModelConfig, PromptTemplate
 from akgentic.llm.config import RuntimeConfig, RunUsageLimits
 from tools import tools
 
-LLM_MODEL = "gpt-5.2"
+LLM_MODEL = "gpt-5.6-luna"
 
 manager_card = AgentCard(
     description="Helpful manager coordinating team work",
@@ -18,12 +18,11 @@ manager_card = AgentCard(
         prompt=PromptTemplate(
             template="You are a helpful manager. Coordinate the team effectively.",
         ),
-        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL, temperature=0.3),
+        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL),
         run_usage_limits=RunUsageLimits(run_request_limit=20, total_tokens_limit=200000),
         runtime_cfg=RuntimeConfig(),
         tools=tools,
     ),
-    routes_to=["Assistant", "Expert"],
 )
 
 assistant_card = AgentCard(
@@ -36,10 +35,10 @@ assistant_card = AgentCard(
         prompt=PromptTemplate(
             template="You are a helpful assistant. Provide clear and accurate information."
         ),
-        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL, temperature=0.3),
+        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL),
         tools=tools,
     ),
-    routes_to=["Manger"],
+    can_be_hired=True,
 )
 
 expert_card = AgentCard(
@@ -52,10 +51,10 @@ expert_card = AgentCard(
         prompt=PromptTemplate(
             template="You are a helpful expert. Provide deep specialized knowledge."
         ),
-        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL, temperature=0.3),
+        model_cfg=ModelConfig(provider="openai", model=LLM_MODEL),
         tools=tools,
     ),
-    routes_to=["Manger"],
+    can_be_hired=True,
 )
 
 agent_cards = [manager_card, assistant_card, expert_card]

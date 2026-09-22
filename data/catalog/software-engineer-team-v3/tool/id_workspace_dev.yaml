@@ -3,7 +3,8 @@ kind: tool
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.tool.workspace.WorkspaceTool
-description: Full read/write workspace for the developer and QA
+description: Full read/write workspace for the developer and QA — source code, tests,
+  and their own sections of the story file — with sandboxed command execution
 payload:
   workspace_view: false
   workspace_edit:
@@ -14,8 +15,24 @@ payload:
       One task at a time. Do not batch unrelated changes into a single edit: a reviewer
       reading the File List has to be able to tell which change served which acceptance
       criterion.
+
+      The story file stories/<n>-<slug>.md is shared - change only your own sections, always
+      with workspace_edit anchored on the section heading. @Developer: tick the task
+      checkboxes, fill the Dev Agent Record, set Status. @QA: fill QA Results. If an edit is
+      refused because the file changed since you read it, read it again and redo the edit.
   workspace_write:
     instructions: |
       Prefer editing an existing file over writing a new one. Every file you add or change
       must appear in your File List - a file changed and not listed is a file the reviewer
       will not read.
+
+      Never workspace_write a story file: it would replace every other role's sections.
+  workspace_exec:
+    mode: docker
+    instructions: |
+      This is for running the project's own tests and checks - pytest, ruff, mypy, npm
+      test, whatever this repository actually uses. Find the real command before inventing
+      one; a test suite invoked the wrong way proves nothing.
+
+      Report the REAL output, including failures. Never describe a run you did not perform.
+      If the command cannot run here, say so plainly rather than implying it passed.

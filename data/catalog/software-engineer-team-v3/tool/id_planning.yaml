@@ -3,15 +3,19 @@ kind: tool
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.tool.planning.PlanningTool
-description: The manager's stage board and gather ledger
+description: The manager's stage board and gather ledger. search_planning is off - the whole
+  board is in the manager's system prompt every turn, and a measured run spent 6 requests
+  searching what it already had.
 payload:
+  search_planning: false
   update_planning:
     instructions: |
-      One task per stage you dispatch, owned by the specialist you sent it to, described by
-      the stage and the question.
+      One task per task you dispatch, owned by the agent you sent it to, described by the
+      story or the question.
 
-      A specialist that sends a `notification` is consulting a peer and is NOT done - leave
-      its task open. Only a `response` closes a stage.
+      A specialist that sends a `notification` is NOT done - leave its task open. Only a
+      `response` closes a task.
 
-      Before sending anything to @Human, read the board. If any task is open, you are
-      waiting: send nothing and stop.
+      The board is always in your context, refreshed every turn - never spend a call to look
+      at it. Before sending anything to @Human, check it there: if any task is open, you are
+      waiting - send nothing and stop.

@@ -1,0 +1,13 @@
+id: id_skills_manager
+kind: tool
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillTool
+description: 'Skills for the manager: plan-the-backlog, create-a-story, edit-the-story, write-the-report'
+payload:
+  param:
+    skills:
+    - __ref__: id_skill_plan_the_backlog
+    - __ref__: id_skill_create_a_story
+    - __ref__: id_skill_edit_the_story
+    - __ref__: id_skill_write_the_report

@@ -22,6 +22,23 @@ entries:
     payload:
       read_only: true
 
+  id_metadata:
+    kind: tool
+    model_type: akgentic.tool.metadata.MetadataTool
+    description: Team metadata — renders the team's business context into every agent's
+      frozen system prompt, once, from one operator-written template
+    payload:
+      render_metadata:
+        header: Team context
+        template: |-
+          Tenant: {tenant}
+          Case reference: {case_ref}
+          Service tier: {tier}
+          Note: {note}
+        expose:
+        - command
+        - system_prompt
+
   id_notification:
     kind: tool
     model_type: akgentic.tool.notification.NotificationTool
@@ -51,11 +68,225 @@ entries:
     payload:
       workspace_id: shared_workspace
 
-  id_vector_store:
+  id_skills_deliverables:
     kind: tool
-    model_type: akgentic.tool.vector_store.VectorStoreTool
-    description: Vector store for retrieval-augmented generation (RAG)
-    payload: {}
+    model_type: akgentic.tool.skill.SkillTool
+    description: Skill library — producing written deliverables (reports, reviews,
+      source summaries)
+    payload:
+      param:
+        skills:
+        - name: write-report
+          description: How to structure a report so the reader gets the answer before
+            the method.
+          content: |
+            A report is read by someone deciding whether to act. Structure it for that reader, not
+            for the order in which you did the work.
+
+            **Lead with the answer.** The first paragraph states what you found and what it means.
+            A reader who stops there should still have the conclusion. Building to a conclusion in
+            the final paragraph is the single most common structural error, and it costs the reader
+            the whole document to recover one sentence.
+
+            **Then the support, strongest first.** Each section makes one claim and gives the
+            evidence for it. If a section does not change what the reader should do, cut it —
+            including work you are proud of.
+
+            **Separate what you know from what you infer.** Mark inference as inference. A reader who
+            cannot tell measurement from estimate will either trust both or neither, and both are
+            wrong.
+
+            **State the limits explicitly.** What you did not check, what data was missing, where the
+            result would change. A report with no stated limits reads as either naive or evasive, and
+            the reader will assume whichever is worse.
+
+            On length: cut every sentence that describes the process rather than the finding.
+            "We analysed the data and found that X" is "X". Numbers belong in tables, not in prose —
+            a sentence with four figures in it is unreadable, and the same four in a table are
+            scannable.
+
+            Finish by re-reading only the opening paragraph. If it does not survive on its own, the
+            report is not done.
+        - name: review-document
+          description: How to review someone else's document so the feedback is actionable
+            rather than a list of reactions.
+          content: |
+            Review in two passes. Mixing them produces a list of typos that misses a wrong argument.
+
+            **First pass — is it right?** Read for the claim and the evidence. Ignore wording
+            entirely. Ask: does the conclusion follow? Is anything asserted that is not supported? Is
+            there a claim that would change the reader's decision if it were wrong, and is that claim
+            adequately supported? Is anything important missing — an alternative not considered, a
+            risk not named, a limit not stated?
+
+            **Second pass — is it clear?** Only once the substance holds. Structure, order,
+            redundancy, wording. There is no point polishing a paragraph that should be deleted.
+
+            **Write findings so they can be acted on.** Each one names the location, states the
+            problem, and says what would resolve it. "This section is confusing" is not actionable;
+            "this section states the conclusion before defining the term it depends on — define it
+            first, or move the definition up" is.
+
+            **Separate severity honestly.** Distinguish what is wrong, what is unclear, and what you
+            would have done differently. The third category is preference, and should be labelled as
+            preference — mixing it with the first two makes a reviewer's whole list easy to dismiss.
+
+            **Say what works, briefly and specifically.** Not to soften the review, but because the
+            author needs to know what not to change while fixing everything else.
+
+            If you find nothing substantive, say so plainly. Manufacturing findings to look thorough
+            wastes the author's time and devalues your real findings on the next review.
+        - name: summarize-source
+          description: How to compress a long source without losing what makes it
+            usable later.
+          content: |
+            A summary is written for a reader who will not open the source. What survives compression
+            determines whether it is useful or merely short.
+
+            **Keep, always:**
+
+            - The claims, with their strength preserved. If the source says "may indicate", do not
+              write "shows". Silently upgrading hedged claims into confident ones is the most common
+              and most damaging summarisation error.
+            - Numbers, with their units and their basis. A figure without its denominator is noise.
+            - Definitions the source relies on, especially where it uses a common word in a narrow
+              way.
+            - Anything that contradicts the source's own conclusion. It is the first thing a careless
+              summary drops and the first thing a careful reader wants.
+
+            **Drop:** worked examples, restatements, throat-clearing, and the source's own summary of
+            itself — which is usually written to persuade rather than to inform.
+
+            **Preserve structure where structure carries meaning.** If the source argues in steps, a
+            summary that reorders them into topics loses the argument. If it is a list of independent
+            findings, the order is free.
+
+            **Record what you dropped, in one line.** "Omits the methodology section and three worked
+            examples." A reader who knows what is missing can decide whether to open the source; one
+            who does not will assume the summary is complete.
+
+            Never resolve an ambiguity on the author's behalf. If the source is unclear on a point
+            that matters, say that it is unclear — that fact is part of what you were asked to report.
+
+  id_skills_teamwork:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: Skill library — working inside a multi-agent team (delegation, handover,
+      escalation)
+    payload:
+      param:
+        skills:
+        - name: delegate-work
+          description: How to hand a task to a teammate so they can act on it without
+            asking you three questions first.
+          content: |
+            Delegating well is mostly about removing the need for a follow-up round trip.
+
+            Before you send anything, decide whether you should delegate at all. Delegate when the
+            work needs a capability you do not have, or when it can proceed in parallel with what you
+            are doing. Do not delegate work you could finish in the time it takes to describe it, and
+            do not delegate a task you cannot judge the result of — you will not be able to tell a
+            good answer from a confident wrong one.
+
+            A delegated task carries four things:
+
+            1. **The goal, not the steps.** Say what "done" looks like. A teammate who knows the goal
+               can recover when the steps turn out to be wrong; one who only has steps cannot.
+            2. **The inputs.** Name the files, the identifiers, the prior decisions. If you are
+               holding context they do not have, include it — they cannot see your conversation.
+            3. **The boundary.** What is explicitly out of scope, and what they must not change.
+               This is the single most common omission, and the one that produces work you have to
+               throw away.
+            4. **The form of the answer.** A number, a file, a recommendation with a rationale, a
+               yes/no. Say which.
+
+            Send one task per message. Two tasks in one message reliably produce one answer.
+
+            When the result comes back, check it against the goal you stated rather than against what
+            you would have done. If it is wrong, say what is wrong and what "right" would look like —
+            "please redo this" without a diagnosis produces a different wrong answer.
+        - name: hand-over
+          description: What a handover must contain when you stop working on something
+            and someone else picks it up.
+          content: |
+            A handover fails when the person picking up has to reconstruct what you already knew. It
+            is not a summary of what you did; it is what they need to continue.
+
+            Write these five, in this order:
+
+            1. **State.** What is true right now. Not the history — the current position. "The
+               migration script runs and processes 40 000 of 52 000 rows before failing."
+            2. **The immediate next action.** The one thing you would do if you had another ten
+               minutes. Be specific enough that they can start without deciding anything.
+            3. **What you ruled out, and why.** This is the part that saves the most time and is
+               skipped the most often. Someone who does not know what you eliminated will eliminate
+               it again.
+            4. **Open questions.** Things you could not resolve, and who or what could resolve them.
+               Mark any question that blocks progress as blocking.
+            5. **Traps.** Anything that looks wrong but is deliberate, and anything that looks fine
+               but is not. If you leave one thing behind, leave this.
+
+            Two rules about tone. Do not describe your own effort — how long something took does not
+            help the next person. And do not soften a dead end: "this approach does not work, here is
+            the evidence" is more useful than "this approach may need more investigation".
+        - name: escalate-to-human
+          description: When to stop and ask a person, and what the escalation message
+            must contain.
+          content: |
+            Escalate when continuing would mean guessing at something only a person can decide. That
+            is a narrow set, and it is worth being precise about, because escalating too often is as
+            costly as never escalating — a team that raises everything trains its humans to skim.
+
+            **Escalate when:**
+
+            - The action is hard to reverse and you were not clearly asked for it — deleting data,
+              sending something outside the organisation, spending money.
+            - Two instructions genuinely conflict and no reading satisfies both.
+            - You have found something that changes the premise of the task — the request assumes
+              something that is not true.
+            - You are blocked on access, permission, or a credential.
+
+            **Do not escalate** to confirm a judgment you are equipped to make, to report progress,
+            or because a task is merely difficult. Make the call, state the assumption you made, and
+            continue.
+
+            **An escalation message contains, in this order:**
+
+            1. **The decision needed**, phrased as a question with the options you see. Not "what
+               should I do?" — "should I X or Y? I recommend X because …".
+            2. **What is blocked** by not answering, and what is not. If most of the work can
+               continue, say so; the person can then answer at their own pace.
+            3. **The evidence** — enough for them to check your reasoning, and no more.
+            4. **What you have already tried**, so they do not suggest it.
+
+            While you wait, finish everything that does not depend on the answer. Arriving with the
+            question *and* the rest of the work done is the difference between an escalation that
+            helps and one that stalls a team.
+        - name: resolve-disagreement
+          description: What to do when a teammate's answer contradicts yours or your
+            own evidence.
+          content: |
+            A contradiction between two agents is information, not an obstacle. The wrong responses
+            are to defer automatically to the other agent, and to restate your position louder.
+
+            Work through it in this order:
+
+            1. **Check that you disagree about the same thing.** Most apparent conflicts are two
+               correct answers to two different questions — different time ranges, different
+               definitions, different scopes. State the question precisely and see whether the
+               disagreement survives.
+            2. **Compare evidence, not conclusions.** Ask what the other answer is based on. If one
+               side has a source and the other has an inference, the source wins. If both have
+               sources that disagree, the disagreement is real and worth surfacing.
+            3. **Try to falsify your own answer first.** It is the cheaper test, because you know
+               where your own reasoning is thin.
+            4. **If it does not resolve, escalate the disagreement itself** — not your side of it.
+               Present both positions and the evidence for each, and say which you find more likely
+               and why. A human resolving a fairly-presented conflict is fast; one refereeing two
+               advocates is slow.
+
+            Do not split the difference. An average of two incompatible answers is usually wrong in a
+            way that neither original answer was, and it hides the fact that a question is still open.
 
   id_web_search:
     kind: tool
@@ -136,42 +367,40 @@ entries:
       provider: openai
       model: gpt-5.4
 
+  id_gpt_56_luna:
+    kind: model
+    model_type: akgentic.llm.ModelConfig
+    description: GPT-5.6 luna (small/fast tier) with fallback to gpt-5.4-mini - member
+      model
+    payload:
+      provider: openai
+      model: gpt-5.6-luna
+      fallback_models:
+      - provider: openai
+        model: gpt-5.4-mini
+
   id_gpt_56_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.5 Sol via OpenAI — shared model configuration
+    description: GPT-5.6 sol (flagship) - not wired in by default, swap a model_cfg
+      ref to use
     payload:
       provider: openai
-      model: gpt-5.5-sol
+      model: gpt-5.6-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.4
 
   id_gpt_56_terra:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.5 Terra via OpenAI — shared model configuration, the team default
+    description: GPT-5.6 terra (mid tier) with fallback to gpt-5.4 - coordinator model
     payload:
       provider: openai
-      model: gpt-5.5-terra
-
-  id_gpt_56_luna:
-    kind: model
-    model_type: akgentic.llm.ModelConfig
-    description: GPT-5.5 Luna via OpenAI — shared model configuration
-    payload:
-      provider: openai
-      model: gpt-5.5-luna
-
-  id_gpt_56:
-    kind: model
-    model_type: akgentic.llm.ModelConfig
-    description: gpt-5.6 with fallback chain to gpt-5.4 then gpt-5.2
-    payload:
-      provider: openai
-      model: gpt-5.6
+      model: gpt-5.6-terra
       fallback_models:
       - provider: openai
         model: gpt-5.4
-      - provider: openai
-        model: gpt-5.2
 
   id_model_config:
     kind: model

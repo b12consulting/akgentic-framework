@@ -25,6 +25,5 @@ payload:
     tools:
     - __ref__: id_knowledge_graph
     - __ref__: id_planning
-    - __ref__: id_vector_store
     - __ref__: id_team_chair
     - __ref__: id_workspace_chair

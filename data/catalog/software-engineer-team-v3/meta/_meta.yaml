@@ -14,25 +14,44 @@ payload:
   properties:
     overview: |
       A software team run as a workflow rather than a chat. @Manager owns the METHOD - the
-      stages, the work-item file, the gate between stages - and none of the technical content.
+      stages, the story files, the gate between stages - and none of the technical content.
       Four specialists hold that: @Analyst (what is actually being asked for), @Architect (how
       it should be built), @Developer (building it), @Reviewer (whether it is right). @QA is
       available for hire when tests need to be written or proven rather than reviewed.
 
-      The design borrows BMAD's central idea: a work-item file that carries everything the
+      The design borrows BMAD's central idea: a story file that carries everything the
       implementer needs, so the developer never has to go hunting for context, and every stage
-      hands the next one a document rather than a conversation.
+      hands the next one a document rather than a conversation. One story per deliverable,
+      stories/<n>-<slug>.md, seeded from stories/_template.md, typed implementation or analysis;
+      complex requests are split into several stories, and an analysis story (Findings, no code)
+      may involve a single role. Each role owns sections of a story (Story/ACs -> @Analyst,
+      Dev Notes -> @Architect, Tasks -> @Manager, Findings -> each task's owner, Dev Agent
+      Record -> @Developer, QA Results -> @QA, Review + follow-up tasks -> @Reviewer).
+      Several roles edit the same file: the workspace write gate refuses any edit made against
+      a version its author has not read, so the old one-writer-per-file rule is no longer needed.
+      Every edit is an anchored workspace_edit; only @Manager's creation is a workspace_write.
     principles: |
       Information asymmetry is the design. @Manager holds the stages and the gates; each
       specialist holds its discipline in full and the manager holds none of it. A coordinator
       that could answer alone will, because delegating buys it only latency.
 
-      Stages are gated, in BMAD's order: analyse -> design -> plan -> implement -> review.
-      A stage may not start before its predecessor's output is written into the work item.
+      BMAD is opt-in, per task. A direct question is one task dispatched with WORKFLOW: none -
+      no story, no backlog. Delivery work runs as stories, and every story task's dispatch
+      names the workflow (a skill) its owner must load; the workflows each role can run are
+      listed in its AgentCard skills as workflow:<name>, which is how @Manager knows them.
+      The procedures live in the software-engineering-skills library namespace, so the
+      prompts carry only identity, scope, limits and the rules that stop loops. @Manager may
+      hire another agent of a role when two stories need it at once.
+      Under the story workflow, stages are gated, in BMAD's order: analyse -> design -> plan -> implement -> review.
+      A stage may not start before its predecessor's section is written into the story.
+      Story Status follows BMAD: drafted -> ready-for-dev -> in-progress -> review -> done.
       The manager enforces the gate; it does not do the work.
 
-      Every specialist has a mandatory peer it MUST consult for a defined class of claim.
-      Permission produces no peer traffic - only an obligation does.
+      Peers are consulted only when blocked: a specialist checks with its own tools first and
+      asks only for what it cannot establish - a run it has no shell for, a decision another
+      role owns. WHO CAN HELP on a dispatch is `none` unless such a need exists. (Earlier
+      versions made consultation mandatory for visible collaboration; a measured run showed
+      every consultation was answerable from the code and cost ~25% of the messages.)
     flow: |
       @Human -> @Manager -> specialists (parallel where the stage allows) -> @Manager -> @Human.
       Hub-and-spoke for reporting: specialists never address @Human. Delegation is the
@@ -40,35 +59,44 @@ payload:
       independent actor turn with no call stack, so the manager gathers via the planning board:
       one task per dispatch, silent while any task is open, one report per round.
 
-      Specialists also consult each other directly. Each has ONE named peer and a defined
-      trigger; it sends that peer a `request` and the manager a `notification`, then exactly one
-      `response` once the peer answers. Depth is capped at 1 - a specialist answering a peer
+      Specialists may consult each other directly when blocked. Each has ONE named peer; it
+      sends that peer a `request` (no notification to the manager - the board shows the task
+      open), then exactly one `response` once the peer answers. Depth is capped at 1 - a specialist answering a peer
       never consults anyone else - so chains terminate.
     workflow_stages: |
       ANALYSE   @Analyst    - what is actually being asked, what is in and out of scope,
                               acceptance criteria, open questions. Gate: ACs written.
       DESIGN    @Architect  - components touched, the approach, the trade-off taken and what
                               was rejected, risks. Gate: approach and file-level impact stated.
-      PLAN      @Manager    - turns the above into a work item with numbered tasks, each tied
-                              to an AC. Gate: every AC has at least one task.
-      IMPLEMENT @Developer  - implements task by task, keeps the File List current, runs the
-                              tests. Gate: all tasks checked and tests passing.
-      REVIEW    @Reviewer   - reviews against the ACs, cites file:line, gives a verdict of
-                              APPROVE / CHANGES REQUESTED / REJECT. Gate: verdict recorded.
+      PLAN      @Manager    - writes Tasks into the story, each tied to an AC, and
+                              sets ready-for-dev. Gate: every AC has at least one task.
+      IMPLEMENT @Developer  - implements task by task, fills the Dev Agent Record and File
+                              List, runs the tests, sets review. Gate: all tasks checked, tests passing.
+      REVIEW    @Reviewer   - reviews against the ACs, cites file:line, appends a review round with
+                              APPROVE / CHANGES REQUESTED / REJECT; on changes, adds Review
+                              Follow-ups to the tasks for @Developer's next round. Gate: verdict
+                              recorded and Status set (done or in-progress).
     tools: |
-      WorkspaceTool - the codebase and the work items. @Manager read/write (it owns
-        work-items/*.md and report.md). @Developer full read/write plus edit. @Analyst,
-        @Architect and @Reviewer are READ-ONLY but keep glob and grep, because reading a
-        codebase is most of their job.
-      ExecTool - @Developer only. A software team that cannot run its tests is doing review by
+      WorkspaceTool - the codebase and the story files. @Manager creates stories and owns
+        backlog.md and report.md. @Developer and @QA full read/write plus edit. @Analyst,
+        @Architect and @Reviewer cannot create or overwrite any file and never touch source
+        code: they read the codebase with glob and grep and edit only their own sections of
+        the story.
+      WorkspaceTool workspace_exec - @Developer, @QA and @Reviewer. A team that cannot run its tests is doing review by
         inspection. Sandboxed, allowlisted commands only.
+      Manager context - id_gpt_56_terra_manager sets context_length 60000, which arms
+        auto-compaction at ~51k; the durable record is the board, graph and stories.
       PlanningTool - @Manager only. The dispatch/gather ledger and the stage board;
-        get_planning is on the SYSTEM_PROMPT channel, which is how it knows it is still waiting.
-      KnowledgeGraphTool - read/write for @Manager, read-only for specialists. Holds work items,
+        get_planning is on the SYSTEM_PROMPT channel, which is how it knows it is still waiting;
+        search_planning is off for the manager, since the board is already in its prompt.
+      KnowledgeGraphTool - read/write for @Manager, read-only for specialists. Holds work items (one per story),
         requirements, components, decisions and risks, with observations recording who
         established each and what a peer confirmed or contested.
       SearchTool - @Analyst and @Architect only; the others work from the codebase. web_fetch
         and web_crawl are DISABLED - one fetch is ~24k tokens and stays in context all turn.
+      SkillTool - one bundle per role from software-engineering-skills (id_skills_<role>): the
+        role's workflows plus edit-the-story and consult-a-peer. Menu in the prefix, bodies on
+        demand; a workflow is loaded only when a dispatch names it.
       TeamTool - explicit per-tier cards, never the auto-injected default. Specialists get the
         roster only; hire/fire and team_activity are manager-only, because a specialist once
         polled team_activity 23 times in one turn instead of answering.
@@ -76,12 +104,12 @@ payload:
       A RECORD, not a view. Work at 20-30 nodes. Nodes carry 2-3 sentences of substance and
       observations using a fixed vocabulary - "Reported by @X", "Confirmed by @X", "Contested
       by @X", "Revised", "Evidence", "Open" - so a peer consultation that changed a decision is
-      preserved. Prune only past ~30, and never before copying the node into the work item.
+      preserved. Prune only past ~30, and never before copying the node into the story's Notes.
     limits: |
       Both tiers on every agent; neither is set by default and the framework's only stock brake
       is pydantic-ai's run_request_limit=50, which is a loop guard rather than a budget.
-        manager     run 15 req / 12 tool calls / 120k tokens / 6k output ; life 60 runs / 600k
-        specialist  run 20 req / 20 tool calls / 120k tokens / 4k output ; life 40 runs / 300k
+        manager     run 15 req / 20 tool calls / 200k tokens / 6k output ; life 60 runs / 1M
+        specialist  run 20 req / 30 tool calls / 200k tokens / 4k output ; life 40 runs / 1M
       Sized at roughly 3x measured clean runs on comparable teams. The per-run
       total_tokens_limit is the only limit that actually bounds cost - request and tool-call
       counts do not, because each request carries the whole growing context.

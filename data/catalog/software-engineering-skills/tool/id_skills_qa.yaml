@@ -1,0 +1,11 @@
+id: id_skills_qa
+kind: tool
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillTool
+description: 'Skills for the qa: edit-the-story, consult-a-peer'
+payload:
+  param:
+    skills:
+    - __ref__: id_skill_edit_the_story
+    - __ref__: id_skill_consult_a_peer

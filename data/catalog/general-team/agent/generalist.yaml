@@ -34,4 +34,3 @@ payload:
     - __ref__: id_workspace_hub
     - __ref__: id_knowledge_graph
     - __ref__: id_team_hub
-    - __ref__: id_vector_store

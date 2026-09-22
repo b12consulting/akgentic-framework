@@ -23,9 +23,9 @@ payload:
 
     ## Core Entities
 
-    (:WorkItem) - A unit of delivery, matching a file in work-items/.
+    (:WorkItem) - A unit of delivery, matching a story file in stories/.
     - name, description (what is being changed and why)
-    - Observations: "Status: analysing|designing|planning|implementing|reviewing|done|blocked"
+    - Observations: "Status: drafted|ready-for-dev|in-progress|review|done|blocked" - the story's own Status line
 
     (:Requirement) - An acceptance criterion. One node per AC worth tracking.
     - name (e.g. "AC2 reject negative quantity"), description (the criterion, testably stated)

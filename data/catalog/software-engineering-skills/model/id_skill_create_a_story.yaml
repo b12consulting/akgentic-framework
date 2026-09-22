@@ -1,0 +1,29 @@
+id: id_skill_create_a_story
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: create-a-story'
+payload:
+  name: create-a-story
+  description: 'Inside the BMAD story workflow, before you create a story file or write its Tasks: the
+    template, what each Type keeps, and the gate to ready-for-dev.'
+  content: |
+    1. **Read `stories/_template.md`.** Fill the number, the title and the Type.
+    2. **Drop the sections the Type does not use**: an `analysis` story drops Dev Notes, Dev Agent
+       Record and QA Results; an `implementation` story drops Findings.
+    3. **`workspace_write` it to `stories/<n>-<slug>.md`** with Status `drafted`. This is the only
+       whole-file write a story ever gets - from then on, you and everyone else use `workspace_edit`
+       (`edit-the-story`).
+    4. **An analysis story** needs no gate: write its Story (the question), its ACs (what the answer
+       must cover) and its Tasks now, and set Status `ready-for-dev`.
+    5. **An implementation story** waits for its Story, ACs and Dev Notes. When no @Analyst stage runs
+       (a bug report, a refactor), transcribe the user's request into Story and ACs yourself -
+       transcription, not analysis.
+    6. **Tasks** - one line each, never starting with a number (it would render as a nested list), `- [ ] **T{n}** @{Owner} — {task} (AC {n})`. Every AC is covered by at
+       least one task. For an implementation story, writing them and setting Status `ready-for-dev` is
+       the gate: only then dispatch @Developer.
+    7. Add the story's line to `backlog.md`.
+
+    **When a story is done**: its Review says APPROVE (implementation - @Reviewer sets it), or every
+    task is ticked and Findings answers every AC (analysis - you set it).

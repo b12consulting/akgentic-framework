@@ -9,5 +9,5 @@ description: Per-run brake for a specialist. tool_calls_limit is 30 because read
 payload:
   run_request_limit: 20
   tool_calls_limit: 30
-  total_tokens_limit: 120000
+  total_tokens_limit: 200000
   output_tokens_limit: 4000

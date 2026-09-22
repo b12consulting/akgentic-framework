@@ -1,0 +1,42 @@
+id: id_skill_edit_the_story
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: edit-the-story'
+payload:
+  name: edit-the-story
+  description: 'Inside a story workflow, before you edit a story file: which section is yours, how to
+    anchor the edit, and what to do when an edit is refused.'
+  content: |
+    The story file `stories/<n>-<slug>.md` is shared by the whole team. Every heading names its owner.
+
+    | Section | Owner |
+    |---|---|
+    | Status line | @Manager -> `ready-for-dev`; @Developer -> `in-progress`, `review`; @Reviewer -> `done`, or back to `in-progress`; @Manager -> `done` for an analysis story |
+    | Story, Acceptance Criteria | @Analyst (@Manager, by transcription, when no analysis stage runs) |
+    | Dev Notes | @Architect |
+    | Tasks | @Manager writes them; each owner ticks its own `[x]`; @Reviewer adds follow-up tasks |
+    | Findings | the owner of each task (analysis stories) |
+    | Dev Agent Record | @Developer |
+    | QA Results | @QA |
+    | Review | @Reviewer |
+    | Notes, Change Log | anyone - append, signed `@you` |
+
+    How to edit:
+
+    1. **Read the whole story first.** The workspace refuses a change to a file you have not read.
+    2. **Change it with `workspace_edit` only**, anchored on your section heading or the placeholder
+       line under it, replacing just that part. Never `workspace_write` an existing story - a whole-file
+       write replaces every other role's sections.
+    3. **If the edit is refused because the file changed since you read it**, a teammate edited another
+       section in the meantime. Read the story again and redo your edit against what is there now.
+       Nothing of yours or theirs is lost.
+    4. **Never change another role's section**, even to fix it. Tell its owner, or add a signed line to
+       Notes.
+    5. **Add one line to the Change Log**: `- @you - what you changed`.
+    6. **Depth goes in the story, not in your reply.** Your reply is a summary and the path.
+    7. **Write Markdown a person can read.** The story is shown to the user rendered. Never put a
+       bare `<word>` in it - the viewer treats it as an HTML tag and can swallow the rest of the file.
+       Angle brackets only inside backticks (`List<str>`); otherwise write {placeholder}. A task line
+       starts with its label, never a number: `- [ ] **T3** @Owner — task (AC 2)`.

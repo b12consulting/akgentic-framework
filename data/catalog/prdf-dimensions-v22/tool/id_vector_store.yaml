@@ -1,7 +1,0 @@
-id: id_vector_store
-kind: tool
-namespace: prdf-dimensions-v22
-user_id: anonymous
-model_type: akgentic.tool.vector_store.VectorStoreTool
-description: Vector store singleton backing semantic search in the graph and the plan
-payload: {}

@@ -194,12 +194,11 @@ The [src/agent_team/main.py](src/agent_team/main.py) example demonstrates a comp
 
 **Key Concepts:**
 
-- `AgentCard` — Defines agent roles with skills, prompts, and `routes_to` restrictions
+- `AgentCard` — Defines agent roles with a description, skills, and config (prompt, model, tools)
 - `BaseAgent` — LLM-powered agent with typed `AgentMessage` protocol
 - `register_agent_profiles()` — Registers `AgentCard` catalog with orchestrator
 - `EventSubscriber.on_message()` — Event-driven message monitoring
 - `HumanProxy.send()` — Sends `AgentMessage` from human to agents
-- `cmd_get_team_roster()` — Retrieves current team roster programmatically
 
 **Run the example:**
 
@@ -270,7 +269,7 @@ This example showcases the **akgentic-agent** package capabilities. For LLM-driv
 
 The same multi-agent team can be assembled entirely from YAML — prompt templates, tools, agents, and team structure — via the **akgentic-catalog** package. This repository ships that data in two forms:
 
-- [`data/catalog/`](data/catalog/) — file-per-entry namespaces (`agent-team`, `digital-product-team`, `global`, `global_tools`), the layout the server reads directly;
+- [`data/catalog/`](data/catalog/) — file-per-entry namespaces (`agent-team`, `general-team`, `software-engineer-team-v3`, `global`, …), the layout the server reads directly;
 - [`data/catalog-import/`](data/catalog-import/) — one bundle YAML per namespace, the import/export form for seeding a fresh deployment.
 
 Instead of defining `AgentCard` objects in Python, entries are declared in a namespace and resolved at runtime through the unified `Catalog`. The `ak-catalog` CLI works against the bundled data directly:
@@ -373,14 +372,18 @@ Tool infrastructure and domain tool implementations.
 
 - **ToolCard / ToolFactory** — Pydantic-serializable tool definitions; factory aggregates cards into LLM-callable tools, system prompts, and programmatic commands
 - **3-Channel System** — `TOOL_CALL` (LLM invokes), `SYSTEM_PROMPT` (injected context), `COMMAND` (programmatic API)
-- **WorkspaceTool** — Read/write filesystem access with glob, grep, edit, patch, PDF/image reading
+- **WorkspaceTool** — Read/write filesystem access with glob, grep, edit, patch, PDF/image reading, sandboxed execution and semantic search
 - **PlanningTool** — Shared actor-based task board with semantic search
 - **KnowledgeGraphTool** — Persistent entity/relation storage with hybrid search
-- **VectorStoreTool** — Named vector stores backing semantic search for the other tools
 - **SearchTool** — Tavily web search and content fetching
 - **MCPTool** — Model Context Protocol server integration (HTTP+SSE and stdio)
 - **TeamTool** — Hire/fire members, role profiles, roster and who-is-working activity
+- **SkillTool** — A library of skills: the menu in the system prompt, the bodies loaded on demand
+- **MetadataTool** — The team's business context, rendered into every agent's prompt
+- **ModelTool** — Runtime model switching from a configured roster
+- **MailboxTool** — Mid-run message acknowledgement and cancellation
 - **NotificationTool** — Schedule a delayed message to yourself via the deferred-result actor mechanism
+- **Vector store service** — Shared in-memory, local, Qdrant or Weaviate backends behind the semantic search of the other tools
 - **RetriableError** — Framework-agnostic retry signal for recoverable failures
 
 See [the akgentic-tool README](https://github.com/b12consulting/akgentic-tool/blob/master/README.md) for complete documentation.
@@ -426,7 +429,7 @@ Team lifecycle management with crash-recovery and event sourcing.
 - **TeamManager** — Create, resume, stop, delete teams via a lifecycle facade
 - **Event Sourcing** — Events persisted live as they flow; crash recovery without explicit checkpoints
 - **TeamCard** — Declarative team definition (agents, entry point, supervisors)
-- **YAML / MongoDB stores** — Zero-infra default (YAML), scalable alternative (MongoDB via `[mongo]` extra)
+- **YAML / MongoDB / PostgreSQL stores** — Zero-infra default (YAML), scalable alternatives via the `[mongo]` or `[postgres]` extra
 - **Resume from any STOPPED team** — Rebuild LLM conversation history from event replay log
 
 See [the akgentic-team README](https://github.com/b12consulting/akgentic-team/blob/master/README.md) for complete documentation.
@@ -547,7 +550,7 @@ PyPI only on the next version bump.
 
 All packages maintain:
 
-- ✅ 80%+ test coverage
+- ✅ 90%+ test coverage
 - ✅ mypy strict mode compliance
 - ✅ Comprehensive unit tests
 - ✅ Integration tests for cross-package features
@@ -562,7 +565,6 @@ All packages maintain:
 - [akgentic-catalog README](https://github.com/b12consulting/akgentic-catalog/blob/master/README.md) - Configuration registry
 - [akgentic-team README](https://github.com/b12consulting/akgentic-team/blob/master/README.md) - Team lifecycle management
 - [akgentic-infra README](https://github.com/b12consulting/akgentic-infra/blob/master/README.md) - Infrastructure backend plugins
-- [System Architecture](_bmad-output/system/architecture.md) - Module dependency graph, boundaries, and cross-cutting patterns
 
 ## Contributing
 

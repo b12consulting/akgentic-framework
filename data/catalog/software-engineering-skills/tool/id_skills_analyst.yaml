@@ -1,0 +1,13 @@
+id: id_skills_analyst
+kind: tool
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillTool
+description: 'Skills for the analyst: write-acceptance-criteria, write-findings, edit-the-story, consult-a-peer'
+payload:
+  param:
+    skills:
+    - __ref__: id_skill_write_acceptance_criteria
+    - __ref__: id_skill_write_findings
+    - __ref__: id_skill_edit_the_story
+    - __ref__: id_skill_consult_a_peer

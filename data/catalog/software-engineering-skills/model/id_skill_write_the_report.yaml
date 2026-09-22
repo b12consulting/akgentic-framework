@@ -1,0 +1,24 @@
+id: id_skill_write_the_report
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: write-the-report'
+payload:
+  name: write-the-report
+  description: 'Before you write report.md at the end of a story workflow: reading the stories, leading
+    with the answer, and what must never be left out.'
+  content: |
+    `report.md` is the deliverable. Build it by **reading the stories**, never from memory - they hold
+    work that left your context turns ago.
+
+    1. **Lead with the answer** to what the user asked, in their terms. A reader who stops after the
+       first paragraph must still have it.
+    2. **One section per story**, in the order the user cares about: what it established, the evidence
+       (a `file:line`, a test result, a command's output), and its status.
+    3. **Disagreements stay visible.** A point one specialist contested is reported with both sides and
+       who holds each - never smoothed over.
+    4. **What is still open**, and who would settle it.
+    5. **Name the specialist behind every finding.** Link each story path.
+
+    The message to @Human stays within your 130-word limit: the headline, and the path to `report.md`.

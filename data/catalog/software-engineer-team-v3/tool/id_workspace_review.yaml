@@ -1,0 +1,46 @@
+id: id_workspace_review
+kind: tool
+namespace: software-engineer-team-v3
+user_id: anonymous
+model_type: akgentic.tool.workspace.WorkspaceTool
+description: The reviewer's workspace — codebase reading, editing the review sections
+  of the shared story file, and sandboxed execution to verify tests. Never edits code.
+payload:
+  workspace_delete: false
+  workspace_write: false
+  workspace_patch: false
+  workspace_multi_edit: false
+  workspace_view: false
+  workspace_edit:
+    instructions: |-
+      You change ONE file: the story your dispatch names, stories/<n>-<slug>.md. Your parts:
+      - Review - append one "### Round N - <verdict>" per review; never rewrite an earlier
+        round.
+      - Follow-up tasks under Tasks, when you request changes: one
+        "- [ ] **R{round}.{k}** @Developer — [High|Med|Low] {the fix} — file:line" per finding.
+      - Status: done on APPROVE, in-progress on CHANGES REQUESTED or REJECT.
+
+      Never change the ACs, the Dev Notes, the task wording or the Dev Agent Record - if one is
+      wrong, that is a finding. Never edit source code or tests: fixing what you review destroys
+      the independence that makes the review worth anything.
+
+      The story is shared: if an edit is refused because the file changed since you read it,
+      read it again and redo the edit. Add one line to the Change Log for each edit.
+  workspace_grep:
+    instructions: |-
+      Grep is how you find what already exists. Before asserting something is absent, search for
+      it. Grep for the CALLERS of anything that changed: most real bugs are at the boundary, not
+      inside the diff.
+  workspace_read:
+    instructions: |-
+      Read a file before making a claim about it, and cite file:line when you do. Read the story
+      in full first - the ACs, the Dev Notes and the File List are what you review against.
+  workspace_exec:
+    mode: docker
+    instructions: |-
+      Use this to RUN the tests the developer says pass, and the project's own lint and type checks.
+      A review that takes a test result on trust is an inspection, not a review.
+
+      Run; do not fix. If something fails that is a finding for your verdict - report the real
+      output. Never edit code to make a test pass: that is @Developer's job, and doing it yourself
+      destroys the independence that makes your review worth anything.

@@ -4,10 +4,10 @@ namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.llm.RunUsageLimits
 description: Per-run brake for the manager. tool_calls_limit is 20 because it writes
-  the work item, the graph and the plan on every stage close - a measured session
+  the story, the graph and the plan on every stage close - a measured session
   used 26 across runs.
 payload:
   run_request_limit: 15
   tool_calls_limit: 20
-  total_tokens_limit: 120000
+  total_tokens_limit: 200000
   output_tokens_limit: 6000

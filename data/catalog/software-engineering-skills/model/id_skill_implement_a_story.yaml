@@ -1,0 +1,32 @@
+id: id_skill_implement_a_story
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: implement-a-story'
+payload:
+  name: implement-a-story
+  description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: implement-a-story`. BMAD implement
+    stage: implement a story or a round of review follow-ups, fill the Dev Agent Record, and reply.'
+  content: |
+    1. **Read the whole story.** Status is `ready-for-dev` (or `in-progress` on a follow-up round). No
+       tasks: ask @Manager and stop. Set Status `in-progress`.
+    2. **Read every file you will change, in full, before changing it.** Match its conventions - naming,
+       error handling, test layout - not the ones you prefer.
+    3. **Task by task, in order.** One task per change; tick `- [x]` as each is done. Never reword a
+       task; never change the ACs or the Dev Notes.
+    4. **Design does not survive the code?** Stop and consult @Architect (`consult-a-peer`). Never
+       quietly build something different.
+    5. **Run the tests** with the project's own command (Dev Notes names it). All must pass. A failure
+       you did not cause is still yours to report - say explicitly if it was already failing.
+    6. **Fill the Dev Agent Record:**
+       - Files changed - every file added, changed or deleted. Complete, or the review is worthless.
+       - Test runs - the verbatim command and its real result. Never describe a run you did not perform.
+       - Notes and deviations - what differs from Dev Notes, and why. Write "none" if nothing does.
+    7. **Set Status `review`.**
+
+    **Follow-up round.** The `R{round}.{k}` tasks @Reviewer added are this round's work. Fix each, tick
+    it, append to the Dev Agent Record (never rewrite the earlier round), and set Status `review`.
+
+    Reply to @Manager in at most 200 words: tasks done (numbers, one line each), files changed, tests
+    (command and result), deviations, anything blocked and what would unblock it; and the story path.

@@ -1,6 +1,6 @@
 namespace: insurance-call-center-v2
-user_id: bootstrap
-name: Insurance Call Center v2
+user_id: anonymous
+name: Insurance Call Center
 description: Call Center Manager relaying verified callers through identification,
   contract lookup and pension/life/disability claims specialists
 properties:
@@ -1014,9 +1014,9 @@ entries:
       vector_store: false
       get_graph:
         expose:
-        - tool_call
         - command
         - llm_context
+        - tool_call
       update_graph:
         instructions: |
           This is the case record — see §9 of your prompt for the schema (entities,

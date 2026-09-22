@@ -7,4 +7,4 @@ description: Lifetime budget for the manager. An agent-tier breach is terminal, 
   this is set well clear of a long session.
 payload:
   agent_request_limit: 60
-  total_tokens_limit: 600000
+  total_tokens_limit: 1000000

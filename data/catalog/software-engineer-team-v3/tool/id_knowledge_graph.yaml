@@ -12,7 +12,7 @@ payload:
 
       Work at 20-30 nodes. Do NOT prune early. Past ~30, prefer merging two thin nodes into
       one substantive node over deleting a real finding, and copy anything you do remove
-      into the work item first.
+      into the story's Notes first.
 
       Every node needs a 2-3 sentence description and observations prefixed:
         "Reported by @X: ..."   what that specialist established (ALWAYS present)

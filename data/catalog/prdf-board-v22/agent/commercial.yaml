@@ -26,5 +26,4 @@ payload:
     tools:
     - __ref__: id_search_commercial
     - __ref__: id_knowledge_graph_ro
-    - __ref__: id_vector_store
     - __ref__: id_team_member

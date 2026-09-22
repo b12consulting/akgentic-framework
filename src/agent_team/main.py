@@ -10,7 +10,7 @@ centralized telemetry without coupling agents to each other.
 **Agent Cards — Dynamic Team Composition**
 Uses AgentCard to define available roles with skills and configurations. Cards are
 registered with the Orchestrator, creating a catalog of roles that can be instantiated
-dynamically. Each card encapsulates role definition, capabilities, and routing rules.
+dynamically. Each card encapsulates role definition, capabilities, and whether it can be hired.
 
 **Asynchronous Message Flow & Autonomous Communication**
 Agents communicate via asynchronous messages (AgentMessage). When an agent receives a message,

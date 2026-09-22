@@ -1,0 +1,13 @@
+id: id_skills_developer
+kind: tool
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillTool
+description: 'Skills for the developer: implement-a-story, write-findings, edit-the-story, consult-a-peer'
+payload:
+  param:
+    skills:
+    - __ref__: id_skill_implement_a_story
+    - __ref__: id_skill_write_findings
+    - __ref__: id_skill_edit_the_story
+    - __ref__: id_skill_consult_a_peer

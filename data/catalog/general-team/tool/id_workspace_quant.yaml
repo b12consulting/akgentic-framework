@@ -3,15 +3,15 @@ kind: tool
 namespace: general-team
 user_id: anonymous
 model_type: akgentic.tool.workspace.WorkspaceTool
-description: Full working directory for the quant — write, edit and discover files.
-  Shares the same directory as ExecTool, so a script written here is runnable there.
+description: Full working directory for the quant — write, edit and discover files,
+  and run them in the sandbox with workspace_exec over the same directory.
 payload:
   workspace_delete: false
   workspace_view: false
   workspace_write:
     instructions: |-
-      This is how you create files. Write your script here, then run it with exec_command -
-      both tools see the SAME directory, so `calc.py` written here is `python calc.py` there.
+      This is how you create files. Write your script here, then run it with workspace_exec -
+      both see the SAME directory, so `calc.py` written here is `python calc.py` there.
 
       Do NOT create files through the shell. Redirection, heredocs and `python -c` that writes
       a file all depend on the sandbox backend and will not reliably land where you expect;
@@ -26,3 +26,19 @@ payload:
   workspace_grep:
     instructions: Find a figure or an assumption you used earlier in the session without
       re-deriving it.
+  workspace_exec:
+    mode: auto
+    instructions: |-
+      This is why you exist: RUN the calculation rather than doing it in your head. Mental
+      arithmetic is where confident answers go wrong.
+
+      Run code; do not author it here. Write the script with workspace_write first, then run
+      it with workspace_exec - they share the same directory. Creating files through the shell
+      (redirection, heredocs, `python -c` that writes a file) is unreliable under the sandbox
+      backends and is the usual reason a run mysteriously finds nothing.
+
+      Report the REAL output. Never describe a run you did not perform. If the sandbox cannot run
+      something, say so plainly rather than reporting the number you expected.
+
+      For an estimate, put the assumptions in the script as named variables - then the chain is
+      visible and anyone can argue with a line of it.

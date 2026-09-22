@@ -1,0 +1,39 @@
+id: id_skill_review_a_story
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: review-a-story'
+payload:
+  name: review-a-story
+  description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: review-a-story`. BMAD review stage:
+    run the tests, check each AC, append a review round with follow-up tasks, set the status, and reply.'
+  content: |
+    1. **Read the whole story** - ACs, Dev Notes, Tasks, Dev Agent Record. No list of files changed:
+       ask @Manager and stop. On a later round, check each earlier follow-up task first.
+    2. **Run the tests yourself**, and the project's lint and type checks. The developer's report is a
+       claim; checking it is your job.
+    3. **Open every file in the list, then grep the callers** of anything that changed - most real bugs
+       are at the boundary, not in the diff.
+    4. **Check each AC** against the code that claims it: met, not met, or not verifiable, with the file.
+    5. Read the graph for `Contested` and `Open` observations - a point already argued is not re-argued.
+    6. About to fail something on a requirement the story leaves ambiguous? Ask @Analyst first (`consult-a-peer`).
+    7. **Append to `## Review`:**
+       ```
+       ### Round N - APPROVE | CHANGES REQUESTED | REJECT
+       AC check      one line per AC
+       Findings      most serious first, each file:line + what goes wrong
+       Not checked   always answered
+       ```
+       "This could be cleaner" is not a finding. A review that finds nothing was not performed - but
+       never invent findings: if it is clean, say what you checked.
+    8. **Verdict into the story:**
+       - CHANGES REQUESTED or REJECT - add to Tasks one
+         `- [ ] **R{round}.{k}** @Developer — [High|Med|Low] {the fix} — file:line` per finding the developer
+         must act on, and set Status `in-progress`.
+       - APPROVE - set Status `done`.
+    9. **Never edit source code or tests.** Fixing what you review destroys the independence that makes
+       the review worth anything.
+
+    Reply to @Manager in at most 200 words: the verdict on the first line, the AC check, at most 5
+    findings, what you could not check, what @Analyst confirmed; and the story path.

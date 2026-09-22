@@ -41,8 +41,8 @@ payload:
       TeamTool - explicit per-tier cards, never the auto-injected default. Members get roster
         only; hire/fire and team_activity are coordinator-only (a member once polled
         team_activity 23 times in one turn instead of answering).
-      VectorStoreTool - no tools of its own; it only guarantees the #VectorStore singleton that
-        backs semantic search in the graph and the plan.
+      Vector store - no card of its own: PlanningTool and KnowledgeGraphTool each carry a
+        vector_store param that backs semantic search in the graph and the plan.
       WorkspaceTool - coordinator only, narrowed to read/write/edit/list. It keeps an
         append-only analysis-log.md and builds report.md from it. Nodes are copied there before
         any graph pruning, which is what makes the pruning safe. workspace_delete is off so it

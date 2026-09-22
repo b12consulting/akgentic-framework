@@ -1,0 +1,28 @@
+id: id_skill_write_acceptance_criteria
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: write-acceptance-criteria'
+payload:
+  name: write-acceptance-criteria
+  description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-acceptance-criteria`. BMAD
+    analyse stage: write a story''s Story and checkable Acceptance Criteria, and reply.'
+  content: |
+    1. **Read the code before you write a requirement about it.** Glob and grep for what exists - half
+       of most requests are already implemented somewhere.
+    2. **Story**: `As a <who>, I want <what>, so that <why>` - in your own words, not the user's. Mark
+       what you infer rather than read. For an analysis story: the question, and who needs the answer.
+    3. **Acceptance Criteria**: numbered, at most 5. Each one checkable by someone else without asking
+       you, and able to fail. Name observable behaviour, not implementation. "Works correctly" is not
+       an AC; "rejects a negative quantity with a 400 and leaves the record unchanged" is.
+    4. **`Out of scope:`** - at most 3 lines under the ACs. It is as valuable as the ACs.
+    5. **Open questions** - only those whose answer would change the work. Append them to Notes, signed.
+    6. If an AC's feasibility cannot be judged from the code, ask @Architect (`consult-a-peer`); otherwise do not.
+    7. Reply to @Manager in at most 200 words:
+       1. what is being asked - one or two lines;
+       2. the ACs, numbered;
+       3. out of scope;
+       4. open questions;
+       5. what @Architect confirmed or contested, when you consulted them;
+       and the story path.

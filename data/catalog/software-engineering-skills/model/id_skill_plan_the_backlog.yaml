@@ -1,0 +1,105 @@
+id: id_skill_plan_the_backlog
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: plan-the-backlog'
+payload:
+  name: plan-the-backlog
+  description: 'When you decide a request needs the BMAD story workflow, before you write or change the
+    backlog: splitting it into stories, story types, which workflow each task names, hiring, and worked
+    examples.'
+  content: |
+    **Split the work into stories - one deliverable per story.** A story is what one review could
+    accept or reject on its own. Split whenever the request holds:
+
+    - separate questions or deliverables - "analyse it" and "do the tests pass?" are two stories;
+    - different kinds of work - an analysis never shares a story with the implementation it informs;
+    - more than ~5 acceptance criteria or ~6 tasks - that is two stories pretending to be one;
+    - parts that can finish independently - separate stories close, and are reported, separately.
+
+    **Every story has a Type.**
+
+    - `implementation` - code changes. Story and ACs -> Dev Notes -> your Tasks -> @Developer -> @Reviewer.
+    - `analysis` - a question to answer, no code changed; the deliverable is Findings. Tasks can be
+      owned by anyone, and an @Analyst-only story is normal. A task that needs a shell - clone,
+      install, run the tests - goes to @Developer.
+
+    **The board.** One task per dispatch, with a description (max 300 characters - a pointer, not a
+    brief), an owner, and `dependencies` on what must finish first. Every task names its story. Sequence
+    only what must be sequenced - parallel is usually what you want.
+
+    **`backlog.md`**: the request, what "done" means for the whole piece, and one line per story -
+    `- [<status>] stories/<n>-<slug>.md - <Type> - <title>` - kept in step with each story's Status.
+
+    **Every story task's dispatch names its workflow** - the skill the owner must load:
+
+    | Stage | Owner | `WORKFLOW:` |
+    |---|---|---|
+    | Story and ACs | @Analyst | `write-acceptance-criteria` |
+    | Dev Notes | @Architect | `write-dev-notes` |
+    | implement, or a follow-up round | @Developer | `implement-a-story` |
+    | review, on any round | @Reviewer | `review-a-story` |
+    | an analysis task, any owner | anyone | `write-findings` |
+
+    The roles' Skills lists in your context say which workflows each role can run.
+
+    **Hire for parallel stories.** When two stories need the same role at the same time, hire another
+    agent of that role for the second story (its profile is marked hireable) and give it that story's
+    tasks. It gets a suffixed name - read the roster and use exactly that name. Fire it when its stories
+    are done. Never hire to replace an agent that is merely slow.
+
+    ## Worked examples - shapes that worked, not templates
+
+    The arrow names the section each task fills.
+
+    **Understanding a repository** - "Clone <repo> and do a functional analysis. Does it have tests,
+    and do they pass?" Two questions, so two stories; cloning needs a shell, so @Developer goes first.
+    ```
+    stories/1-clone-and-test-baseline.md   Type: analysis
+      #1 @Developer  clone into the workspace, find the test command, run the suite  -> Findings
+                     ACs: 1 repo cloned at <path>  2 test suites located, or their absence shown
+                          3 suite run: exact command, pass/fail counts, the failures quoted
+    stories/2-functional-analysis.md       Type: analysis
+      #2 @Analyst    what it does: users, features, main flows, inputs and outputs   -> Findings  deps: [1]
+      #3 @Architect  how it is built: components, data flow, dependencies            -> Findings  deps: [1]
+    ```
+    Then `report.md` answers the user from both stories' Findings.
+
+    **Building a feature** - one implementation story
+    ```
+    stories/1-<slug>.md   Type: implementation
+      #1 @Analyst    scope + acceptance criteria        -> Story, Acceptance Criteria
+      #2 @Architect  approach, rejected alt, files      -> Dev Notes                   deps: [1]
+         (you)       tasks tied to ACs, ready-for-dev   -> Tasks, Status               - the gate
+      #3 @Developer  implement, tests, file list        -> Tasks [x], Dev Agent Record deps: [2]
+      #4 @Reviewer   verify against the ACs, run tests  -> Review                      deps: [3]
+    ```
+    Too big for one review: several implementation stories, each with its own #3 and #4 - and an
+    analysis story in front when the scope itself is unclear.
+
+    **Fixing a bug** - you transcribe the report into Story and ACs
+    ```
+    stories/1-<slug>.md   Type: implementation
+      #1 @Developer  reproduce with a failing test, then fix it       -> Tasks [x], Dev Agent Record
+      #2 @Reviewer   confirm the fix and look for the same bug nearby -> Review                     deps: [1]
+    ```
+
+    **A refactor** - no analyst needed
+    ```
+    stories/1-<slug>.md   Type: implementation
+      #1 @Architect  the target shape, and the order of moves          -> Dev Notes
+      #2 @Developer  execute, one move per commit, tests green between -> Tasks [x], Dev Agent Record deps: [1]
+      #3 @Reviewer   behaviour unchanged? run the suite before/after   -> Review                     deps: [2]
+    ```
+
+    **A design decision** - an analysis story; it may seed an implementation story later
+    ```
+    stories/1-<slug>.md   Type: analysis
+      #1 @Architect  two or three candidate approaches, with trade-offs     -> Findings
+      #2 @Developer  which of them survives this codebase as it actually is -> Findings  deps: [1]
+      #3 @Architect  recommendation, and what it commits us to              -> Findings  deps: [2]
+    ```
+
+    What varies: how many stories, which roles, how much runs in parallel, where it starts. What does
+    not: one deliverable per story, and every result written into its story.

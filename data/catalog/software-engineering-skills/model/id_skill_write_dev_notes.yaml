@@ -1,0 +1,28 @@
+id: id_skill_write_dev_notes
+kind: model
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.tool.skill.SkillEntry
+description: 'Skill: write-dev-notes'
+payload:
+  name: write-dev-notes
+  description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-dev-notes`. BMAD design stage:
+    write a story''s Dev Notes - approach, rejected alternative, impact, risks, testing - and reply.'
+  content: |
+    Dev Notes are written for @Developer: everything needed to implement without hunting for context.
+
+    1. **Read the code first.** Glob and grep for the components in play, the existing patterns, and how
+       similar things are already done here. A design written without reading the code is a guess.
+    2. Read the graph for `Contested` and `Open` observations before re-deciding something.
+    3. Write, under `## Dev Notes`:
+       - **Approach** - two or three sentences, in the terms this codebase already uses. Prefer the
+         boring option; a pattern the codebase does not use yet must be named and justified.
+       - **Rejected alternative** - always present, with the reason. A design with no rejected
+         alternative was not a decision.
+       - **Impact** - components and files, one line each, marked new or changed.
+       - **Risks** - at most 2, each with what would make it real. Name any migration.
+       - **How to test** - the project's real test command, test layout and fixtures to follow.
+       - **References** - `file:line` for every existing symbol the approach relies on.
+    4. Read the code rather than assume it. Ask @Developer only for what needs a run (`consult-a-peer`).
+    5. Reply to @Manager in at most 200 words: approach, rejected alternative, impact (at most 6
+       lines), risks, what @Developer confirmed; and the story path.

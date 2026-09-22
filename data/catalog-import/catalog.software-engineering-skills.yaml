@@ -1,0 +1,482 @@
+namespace: software-engineering-skills
+user_id: anonymous
+name: Software Engineering Skills
+description: Skill library for the software engineering team - the BMAD-style story
+  procedures, loaded on demand through SkillTool
+properties:
+  overview: |
+    No team here. One SkillEntry per procedure under model/, and one SkillTool per role
+    under tool/ bundling the skills that role needs. A team references a bundle
+    cross-namespace: software-engineering-skills.id_skills_<role>.
+  design: |
+    Prompts keep identity, scope, hard limits and the rules that stop loops; the
+    procedures for one act (write ACs, review a story, split a backlog) live here and
+    arrive only when the agent reaches that act. Each description names the ACT, never
+    the topic - SkillTool's menu header obliges the model to load a skill before work
+    of a kind named in the menu, and it matches on the act. Every prompt workflow step
+    also names the skill to load, so the obligation is stated twice.
+shareable: true
+public: true
+entries:
+
+  #### ─── Tools ────────────────────────────────────────────────────────── ####
+  id_skills_analyst:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the analyst: write-acceptance-criteria, write-findings,
+      edit-the-story, consult-a-peer'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_write_acceptance_criteria
+        - __ref__: id_skill_write_findings
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_consult_a_peer
+
+  id_skills_architect:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the architect: write-dev-notes, write-findings, edit-the-story,
+      consult-a-peer'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_write_dev_notes
+        - __ref__: id_skill_write_findings
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_consult_a_peer
+
+  id_skills_developer:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the developer: implement-a-story, write-findings, edit-the-story,
+      consult-a-peer'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_implement_a_story
+        - __ref__: id_skill_write_findings
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_consult_a_peer
+
+  id_skills_manager:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the manager: plan-the-backlog, create-a-story, edit-the-story,
+      write-the-report'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_plan_the_backlog
+        - __ref__: id_skill_create_a_story
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_write_the_report
+
+  id_skills_qa:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the qa: edit-the-story, consult-a-peer'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_consult_a_peer
+
+  id_skills_reviewer:
+    kind: tool
+    model_type: akgentic.tool.skill.SkillTool
+    description: 'Skills for the reviewer: review-a-story, edit-the-story, consult-a-peer'
+    payload:
+      param:
+        skills:
+        - __ref__: id_skill_review_a_story
+        - __ref__: id_skill_edit_the_story
+        - __ref__: id_skill_consult_a_peer
+
+  #### ─── Models ───────────────────────────────────────────────────────── ####
+  id_skill_consult_a_peer:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: consult-a-peer'
+    payload:
+      name: consult-a-peer
+      description: 'Before you ask a colleague a question: when asking is worth it,
+        how to ask, and the bounds that stop the team looping.'
+      content: |
+        Every consultation costs the team several turns. Ask only when you are **blocked**.
+
+        **First, try yourself.** Read the file, grep its callers, read the story and the graph. Code you
+        can read is not a reason to ask; its behaviour on a given input is usually readable too.
+
+        **Ask when - and only when - the answer is out of your reach:**
+
+        - it needs a **run** and you have no shell (only @Developer, @QA and @Reviewer have one);
+        - it is a **decision another role owns** - the approach (@Architect), what a requirement means
+          (@Analyst);
+        - the story and the code leave a **requirement genuinely ambiguous**, and guessing would change
+          the result.
+
+        Your dispatch's WHO CAN HELP says who holds what, when anyone does. It is not an instruction to
+        ask. If you are blocked and nobody fits, say so in your reply rather than inventing the answer.
+
+        **How:** send the peer a `request` with ONE specific question, and stop. Do not send your answer
+        yet, and do not notify @Manager - the board already shows your task open.
+
+        **When their `response` arrives**, fold it into your work, write what they confirmed or contested
+        into the story (your section, or Notes), then send @Manager your single `response` - naming what
+        the peer confirmed or contested.
+
+        **Bounds:**
+
+        - At most one peer per task - your prompt names yours.
+        - Exactly one `response` to @Manager per task, ever. A position now and an update later makes the
+          manager report twice, once on incomplete work.
+        - Depth 1: when a peer asks *you*, answer in at most 80 words, from evidence, and stop. Never
+          consult anyone about it.
+
+  id_skill_create_a_story:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: create-a-story'
+    payload:
+      name: create-a-story
+      description: 'Inside the BMAD story workflow, before you create a story file
+        or write its Tasks: the template, what each Type keeps, and the gate to ready-for-dev.'
+      content: |
+        1. **Read `stories/_template.md`.** Fill the number, the title and the Type.
+        2. **Drop the sections the Type does not use**: an `analysis` story drops Dev Notes, Dev Agent
+           Record and QA Results; an `implementation` story drops Findings.
+        3. **`workspace_write` it to `stories/<n>-<slug>.md`** with Status `drafted`. This is the only
+           whole-file write a story ever gets - from then on, you and everyone else use `workspace_edit`
+           (`edit-the-story`).
+        4. **An analysis story** needs no gate: write its Story (the question), its ACs (what the answer
+           must cover) and its Tasks now, and set Status `ready-for-dev`.
+        5. **An implementation story** waits for its Story, ACs and Dev Notes. When no @Analyst stage runs
+           (a bug report, a refactor), transcribe the user's request into Story and ACs yourself -
+           transcription, not analysis.
+        6. **Tasks** - one line each, never starting with a number (it would render as a nested list), `- [ ] **T{n}** @{Owner} — {task} (AC {n})`. Every AC is covered by at
+           least one task. For an implementation story, writing them and setting Status `ready-for-dev` is
+           the gate: only then dispatch @Developer.
+        7. Add the story's line to `backlog.md`.
+
+        **When a story is done**: its Review says APPROVE (implementation - @Reviewer sets it), or every
+        task is ticked and Findings answers every AC (analysis - you set it).
+
+  id_skill_edit_the_story:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: edit-the-story'
+    payload:
+      name: edit-the-story
+      description: 'Inside a story workflow, before you edit a story file: which section
+        is yours, how to anchor the edit, and what to do when an edit is refused.'
+      content: |
+        The story file `stories/<n>-<slug>.md` is shared by the whole team. Every heading names its owner.
+
+        | Section | Owner |
+        |---|---|
+        | Status line | @Manager -> `ready-for-dev`; @Developer -> `in-progress`, `review`; @Reviewer -> `done`, or back to `in-progress`; @Manager -> `done` for an analysis story |
+        | Story, Acceptance Criteria | @Analyst (@Manager, by transcription, when no analysis stage runs) |
+        | Dev Notes | @Architect |
+        | Tasks | @Manager writes them; each owner ticks its own `[x]`; @Reviewer adds follow-up tasks |
+        | Findings | the owner of each task (analysis stories) |
+        | Dev Agent Record | @Developer |
+        | QA Results | @QA |
+        | Review | @Reviewer |
+        | Notes, Change Log | anyone - append, signed `@you` |
+
+        How to edit:
+
+        1. **Read the whole story first.** The workspace refuses a change to a file you have not read.
+        2. **Change it with `workspace_edit` only**, anchored on your section heading or the placeholder
+           line under it, replacing just that part. Never `workspace_write` an existing story - a whole-file
+           write replaces every other role's sections.
+        3. **If the edit is refused because the file changed since you read it**, a teammate edited another
+           section in the meantime. Read the story again and redo your edit against what is there now.
+           Nothing of yours or theirs is lost.
+        4. **Never change another role's section**, even to fix it. Tell its owner, or add a signed line to
+           Notes.
+        5. **Add one line to the Change Log**: `- @you - what you changed`.
+        6. **Depth goes in the story, not in your reply.** Your reply is a summary and the path.
+        7. **Write Markdown a person can read.** The story is shown to the user rendered. Never put a
+           bare `<word>` in it - the viewer treats it as an HTML tag and can swallow the rest of the file.
+           Angle brackets only inside backticks (`List<str>`); otherwise write {placeholder}. A task line
+           starts with its label, never a number: `- [ ] **T3** @Owner — task (AC 2)`.
+
+  id_skill_implement_a_story:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: implement-a-story'
+    payload:
+      name: implement-a-story
+      description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: implement-a-story`.
+        BMAD implement stage: implement a story or a round of review follow-ups, fill
+        the Dev Agent Record, and reply.'
+      content: |
+        1. **Read the whole story.** Status is `ready-for-dev` (or `in-progress` on a follow-up round). No
+           tasks: ask @Manager and stop. Set Status `in-progress`.
+        2. **Read every file you will change, in full, before changing it.** Match its conventions - naming,
+           error handling, test layout - not the ones you prefer.
+        3. **Task by task, in order.** One task per change; tick `- [x]` as each is done. Never reword a
+           task; never change the ACs or the Dev Notes.
+        4. **Design does not survive the code?** Stop and consult @Architect (`consult-a-peer`). Never
+           quietly build something different.
+        5. **Run the tests** with the project's own command (Dev Notes names it). All must pass. A failure
+           you did not cause is still yours to report - say explicitly if it was already failing.
+        6. **Fill the Dev Agent Record:**
+           - Files changed - every file added, changed or deleted. Complete, or the review is worthless.
+           - Test runs - the verbatim command and its real result. Never describe a run you did not perform.
+           - Notes and deviations - what differs from Dev Notes, and why. Write "none" if nothing does.
+        7. **Set Status `review`.**
+
+        **Follow-up round.** The `R{round}.{k}` tasks @Reviewer added are this round's work. Fix each, tick
+        it, append to the Dev Agent Record (never rewrite the earlier round), and set Status `review`.
+
+        Reply to @Manager in at most 200 words: tasks done (numbers, one line each), files changed, tests
+        (command and result), deviations, anything blocked and what would unblock it; and the story path.
+
+  id_skill_plan_the_backlog:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: plan-the-backlog'
+    payload:
+      name: plan-the-backlog
+      description: 'When you decide a request needs the BMAD story workflow, before
+        you write or change the backlog: splitting it into stories, story types, which
+        workflow each task names, hiring, and worked examples.'
+      content: |
+        **Split the work into stories - one deliverable per story.** A story is what one review could
+        accept or reject on its own. Split whenever the request holds:
+
+        - separate questions or deliverables - "analyse it" and "do the tests pass?" are two stories;
+        - different kinds of work - an analysis never shares a story with the implementation it informs;
+        - more than ~5 acceptance criteria or ~6 tasks - that is two stories pretending to be one;
+        - parts that can finish independently - separate stories close, and are reported, separately.
+
+        **Every story has a Type.**
+
+        - `implementation` - code changes. Story and ACs -> Dev Notes -> your Tasks -> @Developer -> @Reviewer.
+        - `analysis` - a question to answer, no code changed; the deliverable is Findings. Tasks can be
+          owned by anyone, and an @Analyst-only story is normal. A task that needs a shell - clone,
+          install, run the tests - goes to @Developer.
+
+        **The board.** One task per dispatch, with a description (max 300 characters - a pointer, not a
+        brief), an owner, and `dependencies` on what must finish first. Every task names its story. Sequence
+        only what must be sequenced - parallel is usually what you want.
+
+        **`backlog.md`**: the request, what "done" means for the whole piece, and one line per story -
+        `- [<status>] stories/<n>-<slug>.md - <Type> - <title>` - kept in step with each story's Status.
+
+        **Every story task's dispatch names its workflow** - the skill the owner must load:
+
+        | Stage | Owner | `WORKFLOW:` |
+        |---|---|---|
+        | Story and ACs | @Analyst | `write-acceptance-criteria` |
+        | Dev Notes | @Architect | `write-dev-notes` |
+        | implement, or a follow-up round | @Developer | `implement-a-story` |
+        | review, on any round | @Reviewer | `review-a-story` |
+        | an analysis task, any owner | anyone | `write-findings` |
+
+        The roles' Skills lists in your context say which workflows each role can run.
+
+        **Hire for parallel stories.** When two stories need the same role at the same time, hire another
+        agent of that role for the second story (its profile is marked hireable) and give it that story's
+        tasks. It gets a suffixed name - read the roster and use exactly that name. Fire it when its stories
+        are done. Never hire to replace an agent that is merely slow.
+
+        ## Worked examples - shapes that worked, not templates
+
+        The arrow names the section each task fills.
+
+        **Understanding a repository** - "Clone <repo> and do a functional analysis. Does it have tests,
+        and do they pass?" Two questions, so two stories; cloning needs a shell, so @Developer goes first.
+        ```
+        stories/1-clone-and-test-baseline.md   Type: analysis
+          #1 @Developer  clone into the workspace, find the test command, run the suite  -> Findings
+                         ACs: 1 repo cloned at <path>  2 test suites located, or their absence shown
+                              3 suite run: exact command, pass/fail counts, the failures quoted
+        stories/2-functional-analysis.md       Type: analysis
+          #2 @Analyst    what it does: users, features, main flows, inputs and outputs   -> Findings  deps: [1]
+          #3 @Architect  how it is built: components, data flow, dependencies            -> Findings  deps: [1]
+        ```
+        Then `report.md` answers the user from both stories' Findings.
+
+        **Building a feature** - one implementation story
+        ```
+        stories/1-<slug>.md   Type: implementation
+          #1 @Analyst    scope + acceptance criteria        -> Story, Acceptance Criteria
+          #2 @Architect  approach, rejected alt, files      -> Dev Notes                   deps: [1]
+             (you)       tasks tied to ACs, ready-for-dev   -> Tasks, Status               - the gate
+          #3 @Developer  implement, tests, file list        -> Tasks [x], Dev Agent Record deps: [2]
+          #4 @Reviewer   verify against the ACs, run tests  -> Review                      deps: [3]
+        ```
+        Too big for one review: several implementation stories, each with its own #3 and #4 - and an
+        analysis story in front when the scope itself is unclear.
+
+        **Fixing a bug** - you transcribe the report into Story and ACs
+        ```
+        stories/1-<slug>.md   Type: implementation
+          #1 @Developer  reproduce with a failing test, then fix it       -> Tasks [x], Dev Agent Record
+          #2 @Reviewer   confirm the fix and look for the same bug nearby -> Review                     deps: [1]
+        ```
+
+        **A refactor** - no analyst needed
+        ```
+        stories/1-<slug>.md   Type: implementation
+          #1 @Architect  the target shape, and the order of moves          -> Dev Notes
+          #2 @Developer  execute, one move per commit, tests green between -> Tasks [x], Dev Agent Record deps: [1]
+          #3 @Reviewer   behaviour unchanged? run the suite before/after   -> Review                     deps: [2]
+        ```
+
+        **A design decision** - an analysis story; it may seed an implementation story later
+        ```
+        stories/1-<slug>.md   Type: analysis
+          #1 @Architect  two or three candidate approaches, with trade-offs     -> Findings
+          #2 @Developer  which of them survives this codebase as it actually is -> Findings  deps: [1]
+          #3 @Architect  recommendation, and what it commits us to              -> Findings  deps: [2]
+        ```
+
+        What varies: how many stories, which roles, how much runs in parallel, where it starts. What does
+        not: one deliverable per story, and every result written into its story.
+
+  id_skill_review_a_story:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: review-a-story'
+    payload:
+      name: review-a-story
+      description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: review-a-story`.
+        BMAD review stage: run the tests, check each AC, append a review round with
+        follow-up tasks, set the status, and reply.'
+      content: |
+        1. **Read the whole story** - ACs, Dev Notes, Tasks, Dev Agent Record. No list of files changed:
+           ask @Manager and stop. On a later round, check each earlier follow-up task first.
+        2. **Run the tests yourself**, and the project's lint and type checks. The developer's report is a
+           claim; checking it is your job.
+        3. **Open every file in the list, then grep the callers** of anything that changed - most real bugs
+           are at the boundary, not in the diff.
+        4. **Check each AC** against the code that claims it: met, not met, or not verifiable, with the file.
+        5. Read the graph for `Contested` and `Open` observations - a point already argued is not re-argued.
+        6. About to fail something on a requirement the story leaves ambiguous? Ask @Analyst first (`consult-a-peer`).
+        7. **Append to `## Review`:**
+           ```
+           ### Round N - APPROVE | CHANGES REQUESTED | REJECT
+           AC check      one line per AC
+           Findings      most serious first, each file:line + what goes wrong
+           Not checked   always answered
+           ```
+           "This could be cleaner" is not a finding. A review that finds nothing was not performed - but
+           never invent findings: if it is clean, say what you checked.
+        8. **Verdict into the story:**
+           - CHANGES REQUESTED or REJECT - add to Tasks one
+             `- [ ] **R{round}.{k}** @Developer — [High|Med|Low] {the fix} — file:line` per finding the developer
+             must act on, and set Status `in-progress`.
+           - APPROVE - set Status `done`.
+        9. **Never edit source code or tests.** Fixing what you review destroys the independence that makes
+           the review worth anything.
+
+        Reply to @Manager in at most 200 words: the verdict on the first line, the AC check, at most 5
+        findings, what you could not check, what @Analyst confirmed; and the story path.
+
+  id_skill_write_acceptance_criteria:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: write-acceptance-criteria'
+    payload:
+      name: write-acceptance-criteria
+      description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-acceptance-criteria`.
+        BMAD analyse stage: write a story''s Story and checkable Acceptance Criteria,
+        and reply.'
+      content: |
+        1. **Read the code before you write a requirement about it.** Glob and grep for what exists - half
+           of most requests are already implemented somewhere.
+        2. **Story**: `As a <who>, I want <what>, so that <why>` - in your own words, not the user's. Mark
+           what you infer rather than read. For an analysis story: the question, and who needs the answer.
+        3. **Acceptance Criteria**: numbered, at most 5. Each one checkable by someone else without asking
+           you, and able to fail. Name observable behaviour, not implementation. "Works correctly" is not
+           an AC; "rejects a negative quantity with a 400 and leaves the record unchanged" is.
+        4. **`Out of scope:`** - at most 3 lines under the ACs. It is as valuable as the ACs.
+        5. **Open questions** - only those whose answer would change the work. Append them to Notes, signed.
+        6. If an AC's feasibility cannot be judged from the code, ask @Architect (`consult-a-peer`); otherwise do not.
+        7. Reply to @Manager in at most 200 words:
+           1. what is being asked - one or two lines;
+           2. the ACs, numbered;
+           3. out of scope;
+           4. open questions;
+           5. what @Architect confirmed or contested, when you consulted them;
+           and the story path.
+
+  id_skill_write_dev_notes:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: write-dev-notes'
+    payload:
+      name: write-dev-notes
+      description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-dev-notes`.
+        BMAD design stage: write a story''s Dev Notes - approach, rejected alternative,
+        impact, risks, testing - and reply.'
+      content: |
+        Dev Notes are written for @Developer: everything needed to implement without hunting for context.
+
+        1. **Read the code first.** Glob and grep for the components in play, the existing patterns, and how
+           similar things are already done here. A design written without reading the code is a guess.
+        2. Read the graph for `Contested` and `Open` observations before re-deciding something.
+        3. Write, under `## Dev Notes`:
+           - **Approach** - two or three sentences, in the terms this codebase already uses. Prefer the
+             boring option; a pattern the codebase does not use yet must be named and justified.
+           - **Rejected alternative** - always present, with the reason. A design with no rejected
+             alternative was not a decision.
+           - **Impact** - components and files, one line each, marked new or changed.
+           - **Risks** - at most 2, each with what would make it real. Name any migration.
+           - **How to test** - the project's real test command, test layout and fixtures to follow.
+           - **References** - `file:line` for every existing symbol the approach relies on.
+        4. Read the code rather than assume it. Ask @Developer only for what needs a run (`consult-a-peer`).
+        5. Reply to @Manager in at most 200 words: approach, rejected alternative, impact (at most 6
+           lines), risks, what @Developer confirmed; and the story path.
+
+  id_skill_write_findings:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: write-findings'
+    payload:
+      name: write-findings
+      description: 'Workflow - run ONLY when your dispatch says `WORKFLOW: write-findings`.
+        BMAD analysis story: write your result into Findings, with evidence, and reply.'
+      content: |
+        An analysis story answers a question and changes no code. Its deliverable is the Findings section.
+
+        1. Add your subsection under `## Findings` with `workspace_edit`:
+           `### T{n} · @{you} — {the task, as written in Tasks}`.
+        2. **Answer first** - two or three lines a reader can stop after. Then the detail.
+        3. **Every claim carries its evidence**: `file:line`, the document and section, or the exact
+           command and its real output. Keep what you verified apart from what you infer, and say which is
+           which. Never describe a run or a read you did not perform.
+        4. **Cover every AC your task is tied to.** One you cannot answer: say why, and what would answer it.
+        5. Append open points to Notes, signed.
+        6. **Tick your task** in Tasks (`- [x] **T{n}** ...`). Leave the Status line to @Manager - it closes
+           an analysis story.
+        7. Reply to @Manager in at most 200 words: the answer, the evidence it rests on, what is still
+           open, and the story path.
+
+  id_skill_write_the_report:
+    kind: model
+    model_type: akgentic.tool.skill.SkillEntry
+    description: 'Skill: write-the-report'
+    payload:
+      name: write-the-report
+      description: 'Before you write report.md at the end of a story workflow: reading
+        the stories, leading with the answer, and what must never be left out.'
+      content: |
+        `report.md` is the deliverable. Build it by **reading the stories**, never from memory - they hold
+        work that left your context turns ago.
+
+        1. **Lead with the answer** to what the user asked, in their terms. A reader who stops after the
+           first paragraph must still have it.
+        2. **One section per story**, in the order the user cares about: what it established, the evidence
+           (a `file:line`, a test result, a command's output), and its status.
+        3. **Disagreements stay visible.** A point one specialist contested is reported with both sides and
+           who holds each - never smoothed over.
+        4. **What is still open**, and who would settle it.
+        5. **Name the specialist behind every finding.** Link each story path.
+
+        The message to @Human stays within your 130-word limit: the headline, and the path to `report.md`.

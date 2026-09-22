@@ -1,7 +1,0 @@
-id: id_vector_store
-kind: tool
-namespace: global
-user_id: anonymous
-model_type: akgentic.tool.vector_store.VectorStoreTool
-description: Vector store for retrieval-augmented generation (RAG)
-payload: {}

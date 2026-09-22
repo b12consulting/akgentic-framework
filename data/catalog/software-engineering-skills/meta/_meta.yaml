@@ -1,0 +1,25 @@
+id: _meta
+kind: meta
+namespace: software-engineering-skills
+user_id: anonymous
+model_type: akgentic.catalog.models.namespace_meta.NamespaceMeta
+description: Skill library for the software engineering team - the BMAD-style story procedures, loaded
+  on demand through SkillTool
+payload:
+  name: Software Engineering Skills
+  description: Skill library for the software engineering team - the BMAD-style story procedures, loaded
+    on demand through SkillTool
+  properties:
+    overview: |
+      No team here. One SkillEntry per procedure under model/, and one SkillTool per role
+      under tool/ bundling the skills that role needs. A team references a bundle
+      cross-namespace: software-engineering-skills.id_skills_<role>.
+    design: |
+      Prompts keep identity, scope, hard limits and the rules that stop loops; the
+      procedures for one act (write ACs, review a story, split a backlog) live here and
+      arrive only when the agent reaches that act. Each description names the ACT, never
+      the topic - SkillTool's menu header obliges the model to load a skill before work
+      of a kind named in the menu, and it matches on the act. Every prompt workflow step
+      also names the skill to load, so the obligation is stated twice.
+  shareable: true
+  public: true
