@@ -12,7 +12,7 @@
 # them, or the umbrella will claim a set the packages do not agree with.
 [project]
 name = "akgentic-framework"
-version = "2.15.0"
+version = "2.16.0"
 description = "Meta-distribution pinning a coherent akgentic release set."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -75,7 +75,7 @@ infra = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.9.0",
-    "akgentic-infra==1.11.0",
+    "akgentic-infra==1.13.0",
 ]
 # Every subpackage, no optional extras (lean install).
 all = [
@@ -85,7 +85,7 @@ all = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.9.0",
-    "akgentic-infra==1.11.0",
+    "akgentic-infra==1.13.0",
 ]
 # Every subpackage plus its own optional extras. `postgres` is
 # deliberately absent: it is mutually exclusive with `mongo`, which
@@ -97,7 +97,7 @@ all-extras = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog[api,cli,mongo]==2.2.6",
     "akgentic-team[cli,mongo]==1.9.0",
-    "akgentic-infra==1.11.0",
+    "akgentic-infra==1.13.0",
 ]
 # The backend all-extras cannot carry; compose it as [all,postgres].
 postgres = [
