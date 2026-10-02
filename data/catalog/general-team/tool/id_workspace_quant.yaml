@@ -27,7 +27,6 @@ payload:
     instructions: Find a figure or an assumption you used earlier in the session without
       re-deriving it.
   workspace_exec:
-    mode: auto
     instructions: |-
       This is why you exist: RUN the calculation rather than doing it in your head. Mental
       arithmetic is where confident answers go wrong.
