@@ -1171,7 +1171,6 @@ entries:
 
           Never workspace_write a story file: it would replace every other role's sections.
       workspace_exec:
-        mode: docker
         instructions: |
           This is for running the project's own tests and checks - pytest, ruff, mypy, npm
           test, whatever this repository actually uses. Find the real command before inventing
@@ -1337,7 +1336,6 @@ entries:
           Read a file before making a claim about it, and cite file:line when you do. Read the story
           in full first - the ACs, the Dev Notes and the File List are what you review against.
       workspace_exec:
-        mode: docker
         instructions: |-
           Use this to RUN the tests the developer says pass, and the project's own lint and type checks.
           A review that takes a test result on trust is an inspection, not a review.
