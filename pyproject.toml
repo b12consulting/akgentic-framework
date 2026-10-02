@@ -75,7 +75,7 @@ infra = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.10.0",
-    "akgentic-infra==1.14.0",
+    "akgentic-infra==1.14.1",
 ]
 # Every subpackage, no optional extras (lean install).
 all = [
@@ -85,7 +85,7 @@ all = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.10.0",
-    "akgentic-infra==1.14.0",
+    "akgentic-infra==1.14.1",
 ]
 # Every subpackage plus its own optional extras. `postgres` is
 # deliberately absent: it is mutually exclusive with `mongo`, which
@@ -97,7 +97,7 @@ all-extras = [
     "akgentic-agent==1.7.1",
     "akgentic-catalog[api,cli,mongo]==2.2.6",
     "akgentic-team[cli,mongo]==1.10.0",
-    "akgentic-infra==1.14.0",
+    "akgentic-infra==1.14.1",
 ]
 # The backend all-extras cannot carry; compose it as [all,postgres].
 postgres = [

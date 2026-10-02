@@ -186,9 +186,9 @@ requires-dist = [
     { name = "akgentic-core", marker = "extra == 'postgres'", specifier = "==1.5.15" },
     { name = "akgentic-core", marker = "extra == 'team'", specifier = "==1.5.15" },
     { name = "akgentic-core", marker = "extra == 'tool'", specifier = "==1.5.15" },
-    { name = "akgentic-infra", marker = "extra == 'all'", specifier = "==1.14.0" },
-    { name = "akgentic-infra", marker = "extra == 'all-extras'", specifier = "==1.14.0" },
-    { name = "akgentic-infra", marker = "extra == 'infra'", specifier = "==1.14.0" },
+    { name = "akgentic-infra", marker = "extra == 'all'", specifier = "==1.14.1" },
+    { name = "akgentic-infra", marker = "extra == 'all-extras'", specifier = "==1.14.1" },
+    { name = "akgentic-infra", marker = "extra == 'infra'", specifier = "==1.14.1" },
     { name = "akgentic-llm", marker = "extra == 'agent'", specifier = "==2.4.0" },
     { name = "akgentic-llm", marker = "extra == 'all'", specifier = "==2.4.0" },
     { name = "akgentic-llm", marker = "extra == 'all-extras'", specifier = "==2.4.0" },
@@ -219,7 +219,7 @@ dev = [
 
 [[package]]
 name = "akgentic-infra"
-version = "1.14.0"
+version = "1.14.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-agent" },
@@ -241,9 +241,9 @@ dependencies = [
     { name = "websockets" },
     { name = "wsproto" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/ce/8b0ae4ed3fb6d8ac5d84d66f787c2357789c35ef8aa57c885c131c3bfc15/akgentic_infra-1.14.0.tar.gz", hash = "sha256:d4e6d130951da7de6ba1be56caf2d6580b040f8ef4aa824fff34541eced148b5", size = 679563, upload-time = "2026-10-01T16:52:59.339Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/56/32/25b8a36404bea00328c70209fcf7649c3cfc0b8d5e56778d0d37a981c15d/akgentic_infra-1.14.1.tar.gz", hash = "sha256:19e94dd8b815e45bc82083a1b8fd46979c7d6899348eae2807e0241901af755c", size = 682600, upload-time = "2026-10-02T14:21:06.321Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/31/f6/6553ae83e14a535fbc419396cbdf1b7e44608aa58979342d8e556bd36c60/akgentic_infra-1.14.0-py3-none-any.whl", hash = "sha256:6b1e1f71ac67c5b7b303d1527e11967d7d0a08ac4290aacd4f62a8a455ba9d15", size = 324093, upload-time = "2026-10-01T16:52:57.672Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/f6/94d055dd2194dd6e55664c6497775a577c54f6a010097999b4a4101b49cf/akgentic_infra-1.14.1-py3-none-any.whl", hash = "sha256:2600a8dec93b49755c690f55e45ae06b77598e94f90d9c1917feff23c16a5be2", size = 325821, upload-time = "2026-10-02T14:21:04.425Z" },
 ]
 
 [[package]]
