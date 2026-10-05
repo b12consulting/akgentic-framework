@@ -8,11 +8,11 @@ payload:
   list_models: true
   switch_model:
     instructions: |
-      The roster is gpt-5.2 (active by default), gpt-4.1, gpt-5.4, the gpt-5.6 series (luna,
-      terra, sol) and gpt-6. Escalate to gpt-5.6-terra, gpt-5.6-sol or gpt-6 for a task
-      needing deeper reasoning than the one in front of you is getting; drop to gpt-5.6-luna
-      or gpt-4.1 for bulk or routine work. Say which model you switched to and why, so the
-      change is visible rather than silent.
+      The roster is the gpt-6 series — gpt-6-luna (small/fast), gpt-6.1-sol (standard) and
+      gpt-6-astra (strongest) — plus the gpt-5.6 series and the older gpt-5.4, gpt-5.2 and
+      gpt-4.1. Escalate to gpt-6-astra for a task needing deeper reasoning than the one in
+      front of you is getting; drop to gpt-6-luna for bulk or routine work. Say which model
+      you switched to and why, so the change is visible rather than silent.
       The parameter is `model` and takes the whole roster key:
-      switch_model(model="openai:gpt-5.6-terra").
+      switch_model(model="openai:gpt-6-astra").
   active_model: true

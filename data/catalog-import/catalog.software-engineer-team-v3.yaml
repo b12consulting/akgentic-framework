@@ -77,7 +77,7 @@ properties:
       the story.
     WorkspaceTool workspace_exec - @Developer, @QA and @Reviewer. A team that cannot run its tests is doing review by
       inspection. Sandboxed, allowlisted commands only.
-    Manager context - id_gpt_56_terra_manager sets context_length 60000, which arms
+    Manager context - id_gpt_61_sol_manager sets context_length 60000, which arms
       auto-compaction at ~51k; the durable record is the board, graph and stories.
     PlanningTool - @Manager only. The dispatch/gather ledger and the stage board;
       get_planning is on the SYSTEM_PROMPT channel, which is how it knows it is still waiting;
@@ -204,7 +204,7 @@ entries:
         prompt:
           __ref__: id_analyst_prompt
         model_cfg:
-          __ref__: global.id_gpt_56_luna
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -248,7 +248,7 @@ entries:
         prompt:
           __ref__: id_architect_prompt
         model_cfg:
-          __ref__: global.id_gpt_56_luna
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -291,7 +291,7 @@ entries:
         prompt:
           __ref__: id_developer_prompt
         model_cfg:
-          __ref__: global.id_gpt_56_luna
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -347,7 +347,7 @@ entries:
         prompt:
           __ref__: id_manager_prompt
         model_cfg:
-          __ref__: id_gpt_56_terra_manager
+          __ref__: id_gpt_61_sol_manager
         run_usage_limits:
           __ref__: id_run_limits_manager
         agent_usage_limits:
@@ -383,7 +383,7 @@ entries:
         prompt:
           __ref__: id_qa_prompt
         model_cfg:
-          __ref__: global.id_gpt_56_luna
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -425,7 +425,7 @@ entries:
         prompt:
           __ref__: id_reviewer_prompt
         model_cfg:
-          __ref__: global.id_gpt_56_luna
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -1422,21 +1422,21 @@ entries:
       agent_request_limit: 40
       total_tokens_limit: 1000000
 
-  id_gpt_56_terra_manager:
+  id_gpt_61_sol_manager:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.6 terra for the manager, with context_length 60000 so auto-compaction
+    description: GPT-6.1 sol for the manager, with context_length 60000 so auto-compaction
       arms (trigger_ratio 0.85 -> compacts at ~51k). Without context_length compaction
       is off and every request re-sends the whole growing conversation. Safe to compact
       - the manager's durable record is the board, the graph and the stories, not
       its conversation.
     payload:
       provider: openai
-      model: gpt-5.6-terra
+      model: gpt-6.1-sol
       context_length: 60000
       fallback_models:
       - provider: openai
-        model: gpt-5.4
+        model: gpt-5.6-terra
         context_length: 60000
 
   id_run_limits_manager:
@@ -1540,14 +1540,14 @@ entries:
 
   #### ─── Models (External ref, readonly) ──────────────────────────────── ####
 
-  global.id_gpt_56_luna:
+  global.id_gpt_6_luna:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.6 luna (small/fast tier) with fallback to gpt-5.4-mini - member
+    description: GPT-6 luna (small/fast tier) with fallback to gpt-5.6-luna - member
       model
     payload:
       provider: openai
-      model: gpt-5.6-luna
+      model: gpt-6-luna
       fallback_models:
       - provider: openai
-        model: gpt-5.4-mini
+        model: gpt-5.6-luna

@@ -193,7 +193,7 @@ entries:
         prompt:
           __ref__: id_generalist_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_astra
         run_usage_limits:
           __ref__: id_run_limits_hub
         agent_usage_limits:
@@ -242,7 +242,7 @@ entries:
         prompt:
           __ref__: id_quant_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -276,7 +276,7 @@ entries:
         prompt:
           __ref__: id_researcher_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_researcher
         agent_usage_limits:
@@ -312,7 +312,7 @@ entries:
         prompt:
           __ref__: id_skeptic_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -927,11 +927,11 @@ entries:
   id_explorer_model:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.2 at a higher temperature — for the Explorer, where divergence
+    description: GPT-6.1 sol at a higher temperature — for the Explorer, where divergence
       is the point
     payload:
       provider: openai
-      model: gpt-5.2
+      model: gpt-6.1-sol
       temperature: 1.0
 
   id_run_limits_hub:
@@ -969,18 +969,26 @@ entries:
 
   #### ─── Models (External ref, readonly) ──────────────────────────────── ####
 
-  global.id_gpt_52:
+  global.id_gpt_61_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.2 via OpenAI — shared model configuration
+    description: GPT-6.1 sol (standard tier) with fallback to gpt-5.6-terra - coordinator
+      model
     payload:
       provider: openai
-      model: gpt-5.2
+      model: gpt-6.1-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-terra
 
-  global.id_gpt_54:
+  global.id_gpt_6_astra:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.4 via OpenAI — shared model configuration
+    description: GPT-6 astra (strongest tier) with fallback to gpt-5.6-sol - escalation
+      model
     payload:
       provider: openai
-      model: gpt-5.4
+      model: gpt-6-astra
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-sol

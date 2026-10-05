@@ -4,8 +4,8 @@ namespace: global
 user_id: anonymous
 model_type: akgentic.llm.ModelConfig
 description: |
-  LLM model configuration — the shared default: gpt-5.6-luna (small/fast tier) with
-  fallback to gpt-5.4-mini; every other field at its provider default.
+  LLM model configuration — the shared default: gpt-6-luna (small/fast tier) with
+  fallback to gpt-5.6-luna; every other field at its provider default.
   Provider auth is supplied via environment variables, never here: OPENAI_API_KEY (openai),
   AZURE_OPENAI_API_KEY + AZURE_OPENAI_ENDPOINT (azure), ANTHROPIC_API_KEY (anthropic),
   GOOGLE_API_KEY (google-gla), MISTRAL_API_KEY (mistral), NVIDIA_API_KEY (nvidia). Leave a field
@@ -13,11 +13,11 @@ description: |
   ('low' | 'medium' | 'high') applies only to o1/o3-style reasoning models.
 payload:
   provider: openai
-  model: gpt-5.6-luna
+  model: gpt-6-luna
   temperature: null
   seed: null
   max_tokens: null
   reasoning_effort: null
   fallback_models:
   - provider: openai
-    model: gpt-5.4-mini
+    model: gpt-5.6-luna

@@ -30,7 +30,7 @@ payload:
     prompt:
       __ref__: id_manager_prompt
     model_cfg:
-      __ref__: id_gpt_56_terra_manager
+      __ref__: id_gpt_61_sol_manager
     run_usage_limits:
       __ref__: id_run_limits_manager
     agent_usage_limits:

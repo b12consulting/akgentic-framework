@@ -402,24 +402,48 @@ entries:
       - provider: openai
         model: gpt-5.4
 
-  id_gpt_6:
+  id_gpt_61_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-6 (frontier) with fallback to gpt-5.6-sol - not wired in by default,
-      swap a model_cfg ref to use
+    description: GPT-6.1 sol (standard tier) with fallback to gpt-5.6-terra - coordinator
+      model
     payload:
       provider: openai
-      model: gpt-6
+      model: gpt-6.1-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-terra
+
+  id_gpt_6_astra:
+    kind: model
+    model_type: akgentic.llm.ModelConfig
+    description: GPT-6 astra (strongest tier) with fallback to gpt-5.6-sol - escalation
+      model
+    payload:
+      provider: openai
+      model: gpt-6-astra
       fallback_models:
       - provider: openai
         model: gpt-5.6-sol
+
+  id_gpt_6_luna:
+    kind: model
+    model_type: akgentic.llm.ModelConfig
+    description: GPT-6 luna (small/fast tier) with fallback to gpt-5.6-luna - member
+      model
+    payload:
+      provider: openai
+      model: gpt-6-luna
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-luna
 
   id_model_config:
     kind: model
     model_type: akgentic.llm.ModelConfig
     description: |
-      LLM model configuration — the shared default: gpt-5.6-luna (small/fast tier) with
-      fallback to gpt-5.4-mini; every other field at its provider default.
+      LLM model configuration — the shared default: gpt-6-luna (small/fast tier) with
+      fallback to gpt-5.6-luna; every other field at its provider default.
       Provider auth is supplied via environment variables, never here: OPENAI_API_KEY (openai),
       AZURE_OPENAI_API_KEY + AZURE_OPENAI_ENDPOINT (azure), ANTHROPIC_API_KEY (anthropic),
       GOOGLE_API_KEY (google-gla), MISTRAL_API_KEY (mistral), NVIDIA_API_KEY (nvidia). Leave a field
@@ -427,14 +451,14 @@ entries:
       ('low' | 'medium' | 'high') applies only to o1/o3-style reasoning models.
     payload:
       provider: openai
-      model: gpt-5.6-luna
+      model: gpt-6-luna
       temperature: null
       seed: null
       max_tokens: null
       reasoning_effort: null
       fallback_models:
       - provider: openai
-        model: gpt-5.4-mini
+        model: gpt-5.6-luna
 
   id_model_roster_agent_team:
     kind: model
@@ -442,9 +466,9 @@ entries:
     description: |
       Switchable model roster for Agent Team V1 — declared ONCE here and shared by @Manager,
       @Assistant and @Expert, instead of the same three-ref list repeated on every agent.
-      Contents: gpt-6 (strongest), the gpt-5.6 series (sol, terra, luna), gpt-5.4, gpt-5.2 and
-      gpt-4.1 (cheapest, temperature 0.3). Order is listing order only — it does not pick the
-      active model.
+      Contents: the gpt-6 series (astra strongest, 6.1-sol standard, luna small/fast), the gpt-5.6
+      series (sol, terra, luna), gpt-5.4, gpt-5.2 and gpt-4.1 (temperature 0.3). Order is listing
+      order only — it does not pick the active model.
       HOW IT WORKS: a whole LIST is made ref-addressable by wrapping it in a NativeValue, the
       catalog's sanctioned value carrier. The resolver populates THIS payload first, in THIS
       namespace, so each element becomes a real ModelConfig; it then unwraps the NativeValue and
@@ -457,7 +481,9 @@ entries:
       it is also the risk: there is no per-agent subsetting once the roster is shared.
     payload:
       value:
-      - __ref__: id_gpt_6
+      - __ref__: id_gpt_6_astra
+      - __ref__: id_gpt_61_sol
+      - __ref__: id_gpt_6_luna
       - __ref__: id_gpt_56_sol
       - __ref__: id_gpt_56_terra
       - __ref__: id_gpt_56_luna

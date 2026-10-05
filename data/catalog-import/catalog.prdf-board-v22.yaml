@@ -122,7 +122,7 @@ entries:
         prompt:
           __ref__: id_challenger_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -150,7 +150,7 @@ entries:
         prompt:
           __ref__: id_commercial_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -189,7 +189,7 @@ entries:
         prompt:
           __ref__: id_owner_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -216,7 +216,7 @@ entries:
         prompt:
           __ref__: id_producer_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -245,7 +245,7 @@ entries:
         prompt:
           __ref__: id_manager_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_astra
         run_usage_limits:
           __ref__: id_run_limits_chair
         agent_usage_limits:
@@ -274,7 +274,7 @@ entries:
         prompt:
           __ref__: id_regulator_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -302,7 +302,7 @@ entries:
         prompt:
           __ref__: id_servicer_prompt
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_member
         agent_usage_limits:
@@ -1330,18 +1330,26 @@ entries:
 
   #### ─── Models (External ref, readonly) ──────────────────────────────── ####
 
-  global.id_gpt_52:
+  global.id_gpt_61_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.2 via OpenAI — shared model configuration
+    description: GPT-6.1 sol (standard tier) with fallback to gpt-5.6-terra - coordinator
+      model
     payload:
       provider: openai
-      model: gpt-5.2
+      model: gpt-6.1-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-terra
 
-  global.id_gpt_54:
+  global.id_gpt_6_astra:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.4 via OpenAI — shared model configuration
+    description: GPT-6 astra (strongest tier) with fallback to gpt-5.6-sol - escalation
+      model
     payload:
       provider: openai
-      model: gpt-5.4
+      model: gpt-6-astra
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-sol

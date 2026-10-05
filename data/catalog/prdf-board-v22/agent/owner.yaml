@@ -17,7 +17,7 @@ payload:
     prompt:
       __ref__: id_owner_prompt
     model_cfg:
-      __ref__: global.id_gpt_52
+      __ref__: global.id_gpt_61_sol
     run_usage_limits:
       __ref__: id_run_limits_member
     agent_usage_limits:
