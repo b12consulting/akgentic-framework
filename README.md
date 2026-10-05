@@ -145,10 +145,7 @@ setting with its default, and enables the team description generator on
 ```bash
 source .venv/bin/activate
 
-# Load .env into the shell (the server reads the process environment)
-set -a; source .env; set +a
-
-# Launch the server (param --logfire enables structured logging, https://logfire-eu.pydantic.dev/)
+# Launch the server — it loads .env itself (param --logfire enables structured logging, https://logfire-eu.pydantic.dev/)
 python src/infra_server.py
 ```
 
