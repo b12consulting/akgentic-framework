@@ -12,7 +12,7 @@
 # them, or the umbrella will claim a set the packages do not agree with.
 [project]
 name = "akgentic-framework"
-version = "2.16.0"
+version = "2.17.0"
 description = "Meta-distribution pinning a coherent akgentic release set."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -47,64 +47,64 @@ dependencies = [
 # Hand edits here are overwritten; change a submodule's version and re-run it.
 [project.optional-dependencies]
 core = ["akgentic-core==1.5.15"]
-llm = ["akgentic-llm==2.3.0"]
+llm = ["akgentic-llm==2.4.0"]
 tool = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.3",
 ]
 agent = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-llm==2.4.0",
+    "akgentic-tool==1.10.3",
     "akgentic-agent==1.7.1",
 ]
 catalog = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.3",
     "akgentic-catalog==2.2.6",
-    "akgentic-team==1.9.0",
+    "akgentic-team==1.11.0",
 ]
 team = [
     "akgentic-core==1.5.15",
-    "akgentic-team==1.9.0",
+    "akgentic-team==1.11.0",
 ]
 infra = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-llm==2.4.0",
+    "akgentic-tool==1.10.3",
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
-    "akgentic-team==1.9.0",
-    "akgentic-infra==1.13.0",
+    "akgentic-team==1.11.0",
+    "akgentic-infra==1.15.0",
 ]
 # Every subpackage, no optional extras (lean install).
 all = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-llm==2.4.0",
+    "akgentic-tool==1.10.3",
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
-    "akgentic-team==1.9.0",
-    "akgentic-infra==1.13.0",
+    "akgentic-team==1.11.0",
+    "akgentic-infra==1.15.0",
 ]
 # Every subpackage plus its own optional extras. `postgres` is
 # deliberately absent: it is mutually exclusive with `mongo`, which
 # this pulls in.
 all-extras = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.3.0",
-    "akgentic-tool[docs,qdrant,vector-search,vision,weaviate]==1.10.1",
+    "akgentic-llm==2.4.0",
+    "akgentic-tool[docs,qdrant,vector-search,vision,weaviate]==1.10.3",
     "akgentic-agent==1.7.1",
     "akgentic-catalog[api,cli,mongo]==2.2.6",
-    "akgentic-team[cli,mongo]==1.9.0",
-    "akgentic-infra==1.13.0",
+    "akgentic-team[cli,mongo]==1.11.0",
+    "akgentic-infra==1.15.0",
 ]
 # The backend all-extras cannot carry; compose it as [all,postgres].
 postgres = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.3",
     "akgentic-catalog[postgres]==2.2.6",
-    "akgentic-team[postgres]==1.9.0",
+    "akgentic-team[postgres]==1.11.0",
 ]
 # END GENERATED
 

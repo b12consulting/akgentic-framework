@@ -3,9 +3,9 @@ kind: model
 namespace: general-team
 user_id: anonymous
 model_type: akgentic.llm.ModelConfig
-description: GPT-5.2 at a higher temperature — for the Explorer, where divergence
+description: GPT-6 luna at a higher temperature — for the Explorer, where divergence
   is the point
 payload:
   provider: openai
-  model: gpt-5.2
+  model: gpt-6-luna
   temperature: 1.0

@@ -28,7 +28,6 @@ payload:
 
       Never workspace_write a story file: it would replace every other role's sections.
   workspace_exec:
-    mode: docker
     instructions: |
       This is for running the project's own tests and checks - pytest, ruff, mypy, npm
       test, whatever this repository actually uses. Find the real command before inventing

@@ -35,5 +35,8 @@ coverage.json
 */settings.local.json
 .env
 
+# Runtime state written by the server (channel bindings: user ids, team ids)
+data/channel_registry.yaml
+
 # OS files
 .DS_Store

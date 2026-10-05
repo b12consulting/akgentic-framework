@@ -84,7 +84,7 @@ payload:
         the story.
       WorkspaceTool workspace_exec - @Developer, @QA and @Reviewer. A team that cannot run its tests is doing review by
         inspection. Sandboxed, allowlisted commands only.
-      Manager context - id_gpt_56_terra_manager sets context_length 60000, which arms
+      Manager context - id_gpt_61_sol_manager sets context_length 60000, which arms
         auto-compaction at ~51k; the durable record is the board, graph and stories.
       PlanningTool - @Manager only. The dispatch/gather ledger and the stage board;
         get_planning is on the SYSTEM_PROMPT channel, which is how it knows it is still waiting;

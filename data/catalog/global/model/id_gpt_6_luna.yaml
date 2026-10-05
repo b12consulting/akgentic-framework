@@ -1,0 +1,12 @@
+id: id_gpt_6_luna
+kind: model
+namespace: global
+user_id: anonymous
+model_type: akgentic.llm.ModelConfig
+description: GPT-6 luna (small/fast tier) with fallback to gpt-5.6-luna - member model
+payload:
+  provider: openai
+  model: gpt-6-luna
+  fallback_models:
+  - provider: openai
+    model: gpt-5.6-luna

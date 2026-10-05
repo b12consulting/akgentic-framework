@@ -5,14 +5,16 @@ description: Manager coordinating Assistant, Expert and Support Human agents tea
 properties:
   overview: |
     Agent Team V1 with runtime model switching. @Manager, @Assistant and @Expert each carry a
-    three-model roster and the ModelTool card, so the model can be changed mid-session by a
+    shared model roster and the ModelTool card, so the model can be changed mid-session by a
     human command or by the agent itself, and the choice survives a restart.
   models: |
-    Roster on all three LLM agents: openai:gpt-5.2 (ACTIVE), openai:gpt-5.4, openai:gpt-4.1.
-    @Assistant and @Expert previously ran gpt-4.1 and now start on gpt-5.2, with gpt-4.1 still
-    reachable by switching.
+    Roster on all three LLM agents: the gpt-6 series (openai:gpt-6-astra, openai:gpt-6.1-sol,
+    openai:gpt-6-luna), the gpt-5.6 series (sol, terra, luna) and the older openai:gpt-5.4,
+    openai:gpt-5.2 and openai:gpt-4.1. @Manager starts on gpt-6.1-sol, @Assistant and @Expert
+    on gpt-6-luna; every other roster entry is reachable by switching. gpt-6-astra is in the
+    roster for an explicit human switch only — it is expensive and no config starts on it.
     THE ROSTER ITSELF IS ONE SHARED GLOBAL ENTRY: global.id_model_roster_agent_team, a
-    NativeValue carrying a list of three refs to global.id_gpt_*. All three agents point
+    NativeValue carrying a list of refs to global.id_gpt_*. All three agents point
     model_roster at that single ref, so the roster is declared once for the team rather than
     repeated per agent — add or drop a model there and every agent follows. The trade is that
     there is no per-agent subsetting left: the roster is now team-wide by construction.
@@ -22,8 +24,8 @@ properties:
     then unwraps the wrapper and splices the bare list into AgentConfig.model_roster.
     model_cfg stays per-agent and is still declared BY REF to a global.id_gpt_* entry: the
     roster is the set an agent may switch between, model_cfg is the one in force, and it must be
-    one of the roster's three or ReactAgentConfig refuses the config. global.id_gpt_41's
-    temperature=0.3 arrives intact through both, which is what proves the refs resolve rather
+    one of the roster's entries or ReactAgentConfig refuses the config. global.id_gpt_6_luna's
+    fallback_models arrives intact through both, which is what proves the refs resolve rather
     than coerce.
     A single ref in the model_roster POSITION is safe — verify it anyway (below). What is lost
     through the catalog is only the model_cfg-as-a-list union shorthand:
@@ -48,7 +50,7 @@ properties:
   flow: |
     active_model publishes the model in force as an LLM_CONTEXT delta block every turn, so an
     agent always knows what it is running on without calling anything. switch_model and
-    list_models are on TOOL_CALL and COMMAND: a human types /switch_model model=openai:gpt-5.4,
+    list_models are on TOOL_CALL and COMMAND: a human types /switch_model model=openai:gpt-6.1-sol,
     and the model can call the same capability itself. The parameter is `model`, not `key` —
     /switch_model key=... does NOT error, the whole token binds positionally to `model` and is
     refused downstream as an unknown roster key. A switch takes effect on the NEXT run, not the
@@ -115,7 +117,7 @@ entries:
             role: assistant
             instructions: Provide clear and accurate information.
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         model_roster:
           __ref__: global.id_model_roster_agent_team
         tools:
@@ -147,7 +149,7 @@ entries:
             role: expert
             instructions: Provide deep specialized knowledge.
         model_cfg:
-          __ref__: global.id_gpt_41
+          __ref__: global.id_gpt_6_luna
         model_roster:
           __ref__: global.id_model_roster_agent_team
         tools:
@@ -203,7 +205,7 @@ entries:
             role: manager
             instructions: Coordinate the team effectively to achieve goals.
         model_cfg:
-          __ref__: global.id_gpt_52
+          __ref__: global.id_gpt_61_sol
         model_roster:
           __ref__: global.id_model_roster_agent_team
         tools:
@@ -234,12 +236,14 @@ entries:
       list_models: true
       switch_model:
         instructions: |
-          The roster is gpt-5.2 (active by default), gpt-5.4 and gpt-4.1. Escalate to gpt-5.4
-          for a task needing deeper reasoning than the one in front of you is getting; drop to
-          gpt-4.1 for bulk or routine work. Say which model you switched to and why, so the
-          change is visible rather than silent.
+          The roster is the gpt-6 series — gpt-6-luna (small/fast), gpt-6.1-sol (standard) and
+          gpt-6-astra (strongest) — plus the gpt-5.6 series and the older gpt-5.4, gpt-5.2 and
+          gpt-4.1. Escalate to gpt-6.1-sol for a task needing deeper reasoning than the one in
+          front of you is getting; drop to gpt-6-luna for bulk or routine work. gpt-6-astra is
+          expensive: switch to it only when a human asks for it. Say which model you switched
+          to and why, so the change is visible rather than silent.
           The parameter is `model` and takes the whole roster key:
-          switch_model(model="openai:gpt-5.4").
+          switch_model(model="openai:gpt-6.1-sol").
       active_model: true
 
   #### ─── Tools (External ref, readonly) ───────────────────────────────── ####
@@ -412,30 +416,29 @@ entries:
 
   #### ─── Models (External ref, readonly) ──────────────────────────────── ####
 
-  global.id_gpt_41:
+  global.id_gpt_61_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-4.1 via OpenAI — shared model configuration
+    description: GPT-6.1 sol (standard tier) with fallback to gpt-5.6-terra - coordinator
+      model
     payload:
       provider: openai
-      model: gpt-4.1
-      temperature: 0.3
+      model: gpt-6.1-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-terra
 
-  global.id_gpt_52:
+  global.id_gpt_6_luna:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.2 via OpenAI — shared model configuration
+    description: GPT-6 luna (small/fast tier) with fallback to gpt-5.6-luna - member
+      model
     payload:
       provider: openai
-      model: gpt-5.2
-
-  global.id_gpt_54:
-    kind: model
-    model_type: akgentic.llm.ModelConfig
-    description: GPT-5.4 via OpenAI — shared model configuration
-    payload:
-      provider: openai
-      model: gpt-5.4
+      model: gpt-6-luna
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-luna
 
   global.id_model_roster_agent_team:
     kind: model
@@ -443,20 +446,27 @@ entries:
     description: |
       Switchable model roster for Agent Team V1 — declared ONCE here and shared by @Manager,
       @Assistant and @Expert, instead of the same three-ref list repeated on every agent.
-      Contents: gpt-5.4 (strongest), gpt-5.2, gpt-4.1 (cheapest, temperature 0.3). Order is
-      listing order only — it does not pick the active model.
+      Contents: the gpt-6 series (astra strongest, 6.1-sol standard, luna small/fast), the gpt-5.6
+      series (sol, terra, luna), gpt-5.4, gpt-5.2 and gpt-4.1 (temperature 0.3). Order is listing
+      order only — it does not pick the active model.
       HOW IT WORKS: a whole LIST is made ref-addressable by wrapping it in a NativeValue, the
       catalog's sanctioned value carrier. The resolver populates THIS payload first, in THIS
       namespace, so each element becomes a real ModelConfig; it then unwraps the NativeValue and
       splices the bare list into the consuming AgentConfig.model_roster. That is why the inner
       refs are written bare (id_gpt_54), not global-prefixed.
       EACH AGENT STILL DECLARES ITS OWN model_cfg. The roster is the set an agent may switch
-      between; model_cfg is the one in force, and it must be one of the three below or
+      between; model_cfg is the one in force, and it must be one of the entries below or
       ReactAgentConfig refuses the config outright.
       Adding a model here arms it for every agent of the team at once — that is the point, and
       it is also the risk: there is no per-agent subsetting once the roster is shared.
     payload:
       value:
+      - __ref__: id_gpt_6_astra
+      - __ref__: id_gpt_61_sol
+      - __ref__: id_gpt_6_luna
+      - __ref__: id_gpt_56_sol
+      - __ref__: id_gpt_56_terra
+      - __ref__: id_gpt_56_luna
       - __ref__: id_gpt_54
       - __ref__: id_gpt_52
       - __ref__: id_gpt_41

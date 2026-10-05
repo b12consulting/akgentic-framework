@@ -9,6 +9,12 @@ import uvicorn
 from akgentic.infra.server.app import create_app
 from akgentic.infra.server.settings import CommunitySettings
 from akgentic.infra.wiring import wire_community
+from dotenv import load_dotenv
+
+# Loaded at import time: CommunitySettings() reads the environment the moment it
+# is constructed, so every AKGENTIC_* setting in .env must be in place before then.
+# Variables already exported in the shell win over the file.
+load_dotenv()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)

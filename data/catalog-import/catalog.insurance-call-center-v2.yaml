@@ -224,7 +224,7 @@ entries:
         prompt:
           __ref__: id_client_identification_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -248,7 +248,7 @@ entries:
         prompt:
           __ref__: id_contract_identification_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -272,7 +272,7 @@ entries:
         prompt:
           __ref__: id_disability_claims_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -319,7 +319,7 @@ entries:
         prompt:
           __ref__: id_life_insurance_claims_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -344,7 +344,7 @@ entries:
         prompt:
           __ref__: id_manager_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_61_sol
         run_usage_limits:
           __ref__: id_run_limits_manager
         agent_usage_limits:
@@ -370,7 +370,7 @@ entries:
         prompt:
           __ref__: id_pension_claims_prompt
         model_cfg:
-          __ref__: global.id_gpt_54
+          __ref__: global.id_gpt_6_luna
         run_usage_limits:
           __ref__: id_run_limits_specialist
         agent_usage_limits:
@@ -1229,10 +1229,26 @@ entries:
 
   #### ─── Models (External ref, readonly) ──────────────────────────────── ####
 
-  global.id_gpt_54:
+  global.id_gpt_61_sol:
     kind: model
     model_type: akgentic.llm.ModelConfig
-    description: GPT-5.4 via OpenAI — shared model configuration
+    description: GPT-6.1 sol (standard tier) with fallback to gpt-5.6-terra - coordinator
+      model
     payload:
       provider: openai
-      model: gpt-5.4
+      model: gpt-6.1-sol
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-terra
+
+  global.id_gpt_6_luna:
+    kind: model
+    model_type: akgentic.llm.ModelConfig
+    description: GPT-6 luna (small/fast tier) with fallback to gpt-5.6-luna - member
+      model
+    payload:
+      provider: openai
+      model: gpt-6-luna
+      fallback_models:
+      - provider: openai
+        model: gpt-5.6-luna

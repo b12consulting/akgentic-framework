@@ -6,20 +6,27 @@ model_type: akgentic.catalog.NativeValue
 description: |
   Switchable model roster for Agent Team V1 — declared ONCE here and shared by @Manager,
   @Assistant and @Expert, instead of the same three-ref list repeated on every agent.
-  Contents: gpt-5.4 (strongest), gpt-5.2, gpt-4.1 (cheapest, temperature 0.3). Order is
-  listing order only — it does not pick the active model.
+  Contents: the gpt-6 series (astra strongest, 6.1-sol standard, luna small/fast), the gpt-5.6
+  series (sol, terra, luna), gpt-5.4, gpt-5.2 and gpt-4.1 (temperature 0.3). Order is listing
+  order only — it does not pick the active model.
   HOW IT WORKS: a whole LIST is made ref-addressable by wrapping it in a NativeValue, the
   catalog's sanctioned value carrier. The resolver populates THIS payload first, in THIS
   namespace, so each element becomes a real ModelConfig; it then unwraps the NativeValue and
   splices the bare list into the consuming AgentConfig.model_roster. That is why the inner
   refs are written bare (id_gpt_54), not global-prefixed.
   EACH AGENT STILL DECLARES ITS OWN model_cfg. The roster is the set an agent may switch
-  between; model_cfg is the one in force, and it must be one of the three below or
+  between; model_cfg is the one in force, and it must be one of the entries below or
   ReactAgentConfig refuses the config outright.
   Adding a model here arms it for every agent of the team at once — that is the point, and
   it is also the risk: there is no per-agent subsetting once the roster is shared.
 payload:
   value:
+  - __ref__: id_gpt_6_astra
+  - __ref__: id_gpt_61_sol
+  - __ref__: id_gpt_6_luna
+  - __ref__: id_gpt_56_sol
+  - __ref__: id_gpt_56_terra
+  - __ref__: id_gpt_56_luna
   - __ref__: id_gpt_54
   - __ref__: id_gpt_52
   - __ref__: id_gpt_41
