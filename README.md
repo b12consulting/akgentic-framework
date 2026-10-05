@@ -133,16 +133,20 @@ To check how the published metadata resolves without re-commenting anything, use
 
 ### Running the Server and Frontend
 
-After installation, open two terminals to launch the backend and the web UI:
+After installation, open two terminals to launch the backend and the web UI.
+
+Configuration lives in a `.env` file: copy [`.env.example`](.env.example) to
+`.env` and fill in your API keys. The template lists every `AKGENTIC_*` server
+setting with its default, and enables the team description generator on
+`openai` / `gpt-6-luna`.
 
 **Terminal 1 — Start the backend server:**
 
 ```bash
 source .venv/bin/activate
 
-# Set your API keys (get them from https://platform.openai.com/api-keys and https://app.tavily.com/)
-export OPENAI_API_KEY="your-openai-api-key"
-export TAVILY_API_KEY="your-tavily-api-key"
+# Load .env into the shell (the server reads the process environment)
+set -a; source .env; set +a
 
 # Launch the server (param --logfire enables structured logging, https://logfire-eu.pydantic.dev/)
 python src/infra_server.py
