@@ -15,8 +15,9 @@ payload:
     models: |
       Roster on all three LLM agents: the gpt-6 series (openai:gpt-6-astra, openai:gpt-6.1-sol,
       openai:gpt-6-luna), the gpt-5.6 series (sol, terra, luna) and the older openai:gpt-5.4,
-      openai:gpt-5.2 and openai:gpt-4.1. @Manager starts on gpt-6.1-sol, @Assistant on
-      gpt-6-astra and @Expert on gpt-6-luna; every other roster entry is reachable by switching.
+      openai:gpt-5.2 and openai:gpt-4.1. @Manager and @Assistant start on gpt-6.1-sol, @Expert
+      on gpt-6-luna; every other roster entry is reachable by switching. gpt-6-astra is in the
+      roster for an explicit human switch only — it is expensive and no config starts on it.
       THE ROSTER ITSELF IS ONE SHARED GLOBAL ENTRY: global.id_model_roster_agent_team, a
       NativeValue carrying a list of refs to global.id_gpt_*. All three agents point
       model_roster at that single ref, so the roster is declared once for the team rather than
@@ -54,7 +55,7 @@ payload:
     flow: |
       active_model publishes the model in force as an LLM_CONTEXT delta block every turn, so an
       agent always knows what it is running on without calling anything. switch_model and
-      list_models are on TOOL_CALL and COMMAND: a human types /switch_model model=openai:gpt-6-astra,
+      list_models are on TOOL_CALL and COMMAND: a human types /switch_model model=openai:gpt-6.1-sol,
       and the model can call the same capability itself. The parameter is `model`, not `key` —
       /switch_model key=... does NOT error, the whole token binds positionally to `model` and is
       refused downstream as an unknown roster key. A switch takes effect on the NEXT run, not the
