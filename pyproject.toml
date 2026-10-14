@@ -12,7 +12,7 @@
 # them, or the umbrella will claim a set the packages do not agree with.
 [project]
 name = "akgentic-framework"
-version = "2.16.0"
+version = "2.16.1"
 description = "Meta-distribution pinning a coherent akgentic release set."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -50,17 +50,17 @@ core = ["akgentic-core==1.5.15"]
 llm = ["akgentic-llm==2.3.0"]
 tool = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
 ]
 agent = [
     "akgentic-core==1.5.15",
     "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
     "akgentic-agent==1.7.1",
 ]
 catalog = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.9.0",
 ]
@@ -71,7 +71,7 @@ team = [
 infra = [
     "akgentic-core==1.5.15",
     "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.9.0",
@@ -81,7 +81,7 @@ infra = [
 all = [
     "akgentic-core==1.5.15",
     "akgentic-llm==2.3.0",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
     "akgentic-agent==1.7.1",
     "akgentic-catalog==2.2.6",
     "akgentic-team==1.9.0",
@@ -93,7 +93,7 @@ all = [
 all-extras = [
     "akgentic-core==1.5.15",
     "akgentic-llm==2.3.0",
-    "akgentic-tool[docs,qdrant,vector-search,vision,weaviate]==1.10.1",
+    "akgentic-tool[docs,qdrant,vector-search,vision,weaviate]==1.10.1.post1",
     "akgentic-agent==1.7.1",
     "akgentic-catalog[api,cli,mongo]==2.2.6",
     "akgentic-team[cli,mongo]==1.9.0",
@@ -102,7 +102,7 @@ all-extras = [
 # The backend all-extras cannot carry; compose it as [all,postgres].
 postgres = [
     "akgentic-core==1.5.15",
-    "akgentic-tool==1.10.1",
+    "akgentic-tool==1.10.1.post1",
     "akgentic-catalog[postgres]==2.2.6",
     "akgentic-team[postgres]==1.9.0",
 ]
