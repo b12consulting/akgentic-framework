@@ -88,7 +88,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-framework"
-version = "2.16.1"
+version = "2.16.2"
 source = { editable = "." }
 dependencies = [
     { name = "akgentic-core" },
@@ -199,13 +199,13 @@ requires-dist = [
     { name = "akgentic-team", marker = "extra == 'team'", specifier = "==1.9.0" },
     { name = "akgentic-team", extras = ["cli", "mongo"], marker = "extra == 'all-extras'", specifier = "==1.9.0" },
     { name = "akgentic-team", extras = ["postgres"], marker = "extra == 'postgres'", specifier = "==1.9.0" },
-    { name = "akgentic-tool", marker = "extra == 'agent'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", marker = "extra == 'all'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", marker = "extra == 'catalog'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", marker = "extra == 'infra'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", marker = "extra == 'postgres'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", marker = "extra == 'tool'", specifier = "==1.10.1.post1" },
-    { name = "akgentic-tool", extras = ["docs", "qdrant", "vector-search", "vision", "weaviate"], marker = "extra == 'all-extras'", specifier = "==1.10.1.post1" },
+    { name = "akgentic-tool", marker = "extra == 'agent'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", marker = "extra == 'all'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", marker = "extra == 'catalog'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", marker = "extra == 'infra'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", marker = "extra == 'postgres'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", marker = "extra == 'tool'", specifier = "==1.10.1.post2" },
+    { name = "akgentic-tool", extras = ["docs", "qdrant", "vector-search", "vision", "weaviate"], marker = "extra == 'all-extras'", specifier = "==1.10.1.post2" },
 ]
 provides-extras = ["core", "llm", "tool", "agent", "catalog", "team", "infra", "all", "all-extras", "postgres"]
 
@@ -291,7 +291,7 @@ postgres = [
 
 [[package]]
 name = "akgentic-tool"
-version = "1.10.1.post1"
+version = "1.10.1.post2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-core" },
@@ -303,14 +303,14 @@ dependencies = [
     { name = "pyyaml" },
     { name = "tavily-python" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d9/75/6420428c6cce02cbfa26f4ba1bc236e534719f4e91ff66ce12eaadfc998f/akgentic_tool-1.10.1.post1.tar.gz", hash = "sha256:6cfc32315d4d3bc4c7e838e0b3f1d94831bf6d62669516f013a936bd81258302", size = 1395954, upload-time = "2026-10-14T10:46:24.296Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a6/b0/cbac6b8b741720fd1a6afd397310f3e073ce3ebf0a883ce75315ed907ac4/akgentic_tool-1.10.1.post2.tar.gz", hash = "sha256:1e85d38c13bc0f5f5242fb91e894c1abf009acdb35d4b0099069ca77c27d546a", size = 1396994, upload-time = "2026-10-15T09:18:07.243Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/b0/d71eca0db86727d13ed53d6c99ca6b3a9ace74e8215fe59955895f222b49/akgentic_tool-1.10.1.post1-py3-none-any.whl", hash = "sha256:970571613c55625ebbc2843481ba75c251b1852edbffa173775740e7726a2000", size = 706029, upload-time = "2026-10-14T10:46:22.579Z" },
+    { url = "https://files.pythonhosted.org/packages/da/a0/4c87ff1ddf38f287c76effa965cf44edeb12fbede0554983ee79eed48b08/akgentic_tool-1.10.1.post2-py3-none-any.whl", hash = "sha256:161adbe2d4d4fa016fb47b3b527b406212a25b9991b241ecefba5baea719517e", size = 706801, upload-time = "2026-10-15T09:18:05.333Z" },
 ]
 
 [package.optional-dependencies]
 docs = [
-    { name = "markitdown", extra = ["docx", "outlook", "pdf", "pptx", "xls", "xlsx"] },
+    { name = "markitdown", extra = ["az-doc-intel", "docx", "outlook", "pdf", "pptx", "xls", "xlsx"] },
 ]
 qdrant = [
     { name = "qdrant-client" },
@@ -436,6 +436,49 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/36/98/7d93f30d029643c0275dbc0bd6d5a6f670661ee6c9a94d93af7ab4887600/authlib-1.7.2.tar.gz", hash = "sha256:2cea25fefcd4e7173bdf1372c0afc265c8034b23a8cd5dcb6a9164b826c64231", size = 176511, upload-time = "2026-05-06T08:10:23.116Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fb/95/adcb68e20c34162e9135f370d6e31737719c2b6f94bc953fe7ed1f10fe21/authlib-1.7.2-py2.py3-none-any.whl", hash = "sha256:3e1faedc9d87e7d56a164eca3ccb6ace0d61b94abe83e92242f8dc8bba9b4a9f", size = 259548, upload-time = "2026-05-06T08:10:21.436Z" },
+]
+
+[[package]]
+name = "azure-ai-documentintelligence"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/44/7b/8115cd713e2caa5e44def85f2b7ebd02a74ae74d7113ba20bdd41fd6dd80/azure_ai_documentintelligence-1.0.2.tar.gz", hash = "sha256:4d75a2513f2839365ebabc0e0e1772f5601b3a8c9a71e75da12440da13b63484", size = 170940, upload-time = "2025-03-27T02:46:20.606Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d9/75/c9ec040f23082f54ffb1977ff8f364c2d21c79a640a13d1c1809e7fd6b1a/azure_ai_documentintelligence-1.0.2-py3-none-any.whl", hash = "sha256:e1fb446abbdeccc9759d897898a0fe13141ed29f9ad11fc705f951925822ed59", size = 106005, upload-time = "2025-03-27T02:46:22.356Z" },
+]
+
+[[package]]
+name = "azure-core"
+version = "1.41.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a6/f3/b416179e408990df5db0d516283022dde0f5d0111d98c1a848e41853e81c/azure_core-1.41.0.tar.gz", hash = "sha256:f46ff5dfcd230f25cf1c19e8a34b8dc08a337b2503e268bb600a16c00db8ad5a", size = 381042, upload-time = "2026-05-07T23:30:54.302Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5b/db/325c6d7312d2200251c52323878281045aaffcb5586612296484e4280eaa/azure_core-1.41.0-py3-none-any.whl", hash = "sha256:522b4011e8180b1a3dcd2024396a4e7fe9ac37fb8597db47163d230b5efe892d", size = 220920, upload-time = "2026-05-07T23:30:56.357Z" },
+]
+
+[[package]]
+name = "azure-identity"
+version = "1.26.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "cryptography" },
+    { name = "msal" },
+    { name = "msal-extensions" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e6/87/e88098a024d74b7434de5b110c261da024fe5d6c139f1847f6f8a2b76678/azure_identity-1.26.0.tar.gz", hash = "sha256:61b4538b87df10d2d6d44b77cd5ea28a8929fd4929d58b45bf3f230f7daba02e", size = 310151, upload-time = "2026-10-01T14:17:47.825Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b2/d5/ae45ce8009d0d015304b206c7c4a6cbab02c03f8f07eedefb32b099ccee3/azure_identity-1.26.0-py3-none-any.whl", hash = "sha256:3c60d9682b3ac01507388d474cb5a5ffbe54152a96b6cdcaa7013da9315cf186", size = 195958, upload-time = "2026-10-01T14:17:49.705Z" },
 ]
 
 [[package]]
@@ -1145,6 +1188,15 @@ wheels = [
 ]
 
 [[package]]
+name = "isodate"
+version = "0.7.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/54/4d/e940025e2ce31a8ce1202635910747e5a87cc3a6a6bb2d00973375014749/isodate-0.7.2.tar.gz", hash = "sha256:4cd1aa0f43ca76f4a6c6c0292a85f40b35ec2e43e315b59f06e6d32171a953e6", size = 29705, upload-time = "2024-10-08T23:04:11.5Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/aa/0aca39a37d3c7eb941ba736ede56d689e7be91cab5d9ca846bde3999eba6/isodate-0.7.2-py3-none-any.whl", hash = "sha256:28009937d8031054830160fce6d409ed342816b543597cece116d966c6d99e15", size = 22320, upload-time = "2024-10-08T23:04:09.501Z" },
+]
+
+[[package]]
 name = "jaraco-classes"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1590,6 +1642,10 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+az-doc-intel = [
+    { name = "azure-ai-documentintelligence" },
+    { name = "azure-identity" },
+]
 docx = [
     { name = "lxml" },
     { name = "mammoth" },
@@ -1757,6 +1813,32 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e0/47/dd32fa426cc72114383ac549964eecb20ecfd886d1e5ccf5340b55b02f57/mpmath-1.3.0.tar.gz", hash = "sha256:7a28eb2a9774d00c7bc92411c19a89209d5da7c4c9a9e227be8330a23a25b91f", size = 508106, upload-time = "2023-03-07T16:47:11.061Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl", hash = "sha256:a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c", size = 536198, upload-time = "2023-03-07T16:47:09.197Z" },
+]
+
+[[package]]
+name = "msal"
+version = "1.39.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "pyjwt", extra = ["crypto"] },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/bb/85/747d28986a44b715cc51cf57aa021c8fd94e9614064261ceec77320e8b0b/msal-1.39.0.tar.gz", hash = "sha256:6ab7de335e6d7f5717e2c7e1dbf86e4dda2f6acf3c56773b78dc53ebc6395b5f", size = 205360, upload-time = "2026-09-17T16:07:45.1Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a4/32/178457385925ce301c7b3232bd85665d4df57da39568b62dcfc74031873f/msal-1.39.0-py3-none-any.whl", hash = "sha256:2d2577886906cd7293850dffa2da29119966c213bfc6ec0cecf8bf7621e1ca77", size = 131629, upload-time = "2026-09-17T16:07:46.722Z" },
+]
+
+[[package]]
+name = "msal-extensions"
+version = "1.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "msal" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/01/99/5d239b6156eddf761a636bded1118414d161bd6b7b37a9335549ed159396/msal_extensions-1.3.1.tar.gz", hash = "sha256:c5b0fd10f65ef62b5f1d62f4251d51cbcaf003fcedae8c91b040a488614be1a4", size = 23315, upload-time = "2025-03-14T23:51:03.902Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5e/75/bd9b7bb966668920f06b200e84454c8f3566b102183bc55c5473d96cb2b9/msal_extensions-1.3.1-py3-none-any.whl", hash = "sha256:96d3de4d034504e969ac5e85bae8106c8373b5c6568e4c8fa7af2eca9dbe6bca", size = 20583, upload-time = "2025-03-14T23:51:03.016Z" },
 ]
 
 [[package]]
@@ -3056,8 +3138,8 @@ name = "secretstorage"
 version = "3.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cryptography" },
-    { name = "jeepney" },
+    { name = "cryptography", marker = "sys_platform != 'win32'" },
+    { name = "jeepney", marker = "sys_platform != 'win32'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1c/03/e834bcd866f2f8a49a85eaff47340affa3bfa391ee9912a952a1faa68c7b/secretstorage-3.5.0.tar.gz", hash = "sha256:f04b8e4689cbce351744d5537bf6b1329c6fc68f91fa666f60a380edddcd11be", size = 19884, upload-time = "2025-11-23T19:02:53.191Z" }
 wheels = [
