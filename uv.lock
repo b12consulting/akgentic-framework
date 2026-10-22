@@ -26,7 +26,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-agent"
-version = "1.8.0"
+version = "1.8.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-core" },
@@ -35,9 +35,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-ai-slim" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c5/ab/9d4ed4f1553d8edbc4a35c69a7b5a9846abf273971be7661682aa5936f3e/akgentic_agent-1.8.0.tar.gz", hash = "sha256:1db3d0bd7397b9cdb52b684ed752d5dfcac5e347386bcec88082fcc173ebc438", size = 282708 }
+sdist = { url = "https://files.pythonhosted.org/packages/a9/06/59074b514ef5ebab0360044f54aa3a114fdf93c066588256397b51f1bbf1/akgentic_agent-1.8.1.tar.gz", hash = "sha256:c344f537fecf1637dec3872a9c4ba04546484487854edce718fd939aff1a9c41", size = 285289 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/3d/5a028a053d24b5908806cc767bfbcc44bf748ec5d2c96c4c19969b0e250e/akgentic_agent-1.8.0-py3-none-any.whl", hash = "sha256:f70dcfb8daf217fce06ed0011745203010daeced2180f61db910f2aa019be402", size = 85843 },
+    { url = "https://files.pythonhosted.org/packages/e6/03/e81d91d5d5fa7a2c719845ceac87511e9d02a0a6e3dc1504d4469d3cf685/akgentic_agent-1.8.1-py3-none-any.whl", hash = "sha256:700f6bc4495bf4b3e4492c29d705fa09400ab7165726869cbfdc439dabcbe344", size = 86582 },
 ]
 
 [[package]]
@@ -88,7 +88,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-framework"
-version = "2.18.0"
+version = "2.18.1"
 source = { editable = "." }
 dependencies = [
     { name = "akgentic-core" },
@@ -166,10 +166,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "akgentic-agent", marker = "extra == 'agent'", specifier = "==1.8.0" },
-    { name = "akgentic-agent", marker = "extra == 'all'", specifier = "==1.8.0" },
-    { name = "akgentic-agent", marker = "extra == 'all-extras'", specifier = "==1.8.0" },
-    { name = "akgentic-agent", marker = "extra == 'infra'", specifier = "==1.8.0" },
+    { name = "akgentic-agent", marker = "extra == 'agent'", specifier = "==1.8.1" },
+    { name = "akgentic-agent", marker = "extra == 'all'", specifier = "==1.8.1" },
+    { name = "akgentic-agent", marker = "extra == 'all-extras'", specifier = "==1.8.1" },
+    { name = "akgentic-agent", marker = "extra == 'infra'", specifier = "==1.8.1" },
     { name = "akgentic-catalog", marker = "extra == 'all'", specifier = "==2.2.7" },
     { name = "akgentic-catalog", marker = "extra == 'catalog'", specifier = "==2.2.7" },
     { name = "akgentic-catalog", marker = "extra == 'infra'", specifier = "==2.2.7" },
@@ -199,13 +199,13 @@ requires-dist = [
     { name = "akgentic-team", marker = "extra == 'team'", specifier = "==1.11.0" },
     { name = "akgentic-team", extras = ["cli", "mongo"], marker = "extra == 'all-extras'", specifier = "==1.11.0" },
     { name = "akgentic-team", extras = ["postgres"], marker = "extra == 'postgres'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'agent'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'all'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'catalog'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'infra'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'postgres'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", marker = "extra == 'tool'", specifier = "==1.11.0" },
-    { name = "akgentic-tool", extras = ["docs", "qdrant", "vector-search", "vision", "weaviate"], marker = "extra == 'all-extras'", specifier = "==1.11.0" },
+    { name = "akgentic-tool", marker = "extra == 'agent'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", marker = "extra == 'all'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", marker = "extra == 'catalog'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", marker = "extra == 'infra'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", marker = "extra == 'postgres'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", marker = "extra == 'tool'", specifier = "==1.12.0" },
+    { name = "akgentic-tool", extras = ["docs", "qdrant", "vector-search", "vision", "weaviate"], marker = "extra == 'all-extras'", specifier = "==1.12.0" },
 ]
 provides-extras = ["core", "llm", "tool", "agent", "catalog", "team", "infra", "all", "all-extras", "postgres"]
 
@@ -292,11 +292,12 @@ postgres = [
 
 [[package]]
 name = "akgentic-tool"
-version = "1.11.0"
+version = "1.12.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-core" },
     { name = "fastmcp-slim", extra = ["client"] },
+    { name = "griffelib" },
     { name = "httpx" },
     { name = "markdown-it-py" },
     { name = "pathspec" },
@@ -306,9 +307,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "tavily-python" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a2/31/a2827b57ca4005ba4c17f59cadbb64160d128769de20a35b9a7e93a40ba7/akgentic_tool-1.11.0.tar.gz", hash = "sha256:57cf82ccf5dd3b7bedb2de8ea619fd3ce1c2033767f7ffc1853fd10b7fe22648", size = 1436042 }
+sdist = { url = "https://files.pythonhosted.org/packages/e8/a9/a721f03f6afa90bb6a8c73cc07f83bbd88b33a04e90b29e3a18e90cfff97/akgentic_tool-1.12.0.tar.gz", hash = "sha256:68f425d9a4a5600fab73a66278757411c4cc0ef9fb03a001ec2c3a9f71b1eff4", size = 1454756 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/1f/ff89795a65e48cc9e943cf90b65f15d8b2f349b1452814425ff946bff91d/akgentic_tool-1.11.0-py3-none-any.whl", hash = "sha256:510b06cffbd03f5b56e640e42721c9332604262885113bb92b894c1e5869c1b0", size = 722539 },
+    { url = "https://files.pythonhosted.org/packages/0a/99/f75f739cd2d1aa29833cb371e0a49998fd652bebf47467b53f589e509ee2/akgentic_tool-1.12.0-py3-none-any.whl", hash = "sha256:b6dc708976287725f848f5c4f53c98876ec1917b83484c89304a5276a128a47d", size = 729959 },
 ]
 
 [package.optional-dependencies]
@@ -2501,7 +2502,7 @@ email = [
 
 [[package]]
 name = "pydantic-ai-slim"
-version = "2.57.0"
+version = "2.59.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -2513,9 +2514,9 @@ dependencies = [
     { name = "pydantic-graph" },
     { name = "typing-inspection" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a1/dd/f92904e5719bb7de25eaa9eb9f0fb9746a8b43b02775249d2516b9583f5b/pydantic_ai_slim-2.57.0.tar.gz", hash = "sha256:2c5c150bcd097e6a1e267ea13e7f279a0b504d46b346a4e00b61e1996ad05372", size = 1907558 }
+sdist = { url = "https://files.pythonhosted.org/packages/c3/1e/cd44ec11b296ec93fb9412f9aaef2b265f60e49a75b49cc0b2c6b1aa60fd/pydantic_ai_slim-2.59.0.tar.gz", hash = "sha256:ce441e646dd79a8dd80ef19c9f6821d803857f08870b260b61db5e8e7af95010", size = 2058453 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cc/4f/ee187f80f9f9232fc6915da47d84305dfa62d4f879efbb1e6ff262172437/pydantic_ai_slim-2.57.0-py3-none-any.whl", hash = "sha256:a07d732e09df8d51f22bd3be2ad45ab644721a904809a2481146bf5d7bb47c67", size = 2229864 },
+    { url = "https://files.pythonhosted.org/packages/73/79/d8c8cb808b69a6f286bc8bab6bab832c1da98163ab37689bfd5208508f25/pydantic_ai_slim-2.59.0-py3-none-any.whl", hash = "sha256:b4bc3a659176f616ad1a104cb8faed33c1565b449cb16226c6f6adb0c674770f", size = 2392716 },
 ]
 
 [package.optional-dependencies]
@@ -2617,7 +2618,7 @@ wheels = [
 
 [[package]]
 name = "pydantic-graph"
-version = "2.57.0"
+version = "2.59.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -2625,9 +2626,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "typing-inspection" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b5/09/f02d836a27cf943b30c0bd3a3d2a3818e98ca5d554acc35be414e694984d/pydantic_graph-2.57.0.tar.gz", hash = "sha256:f848857baab4030c44b30de0c3ba650749d60f2295a0723645fb325f92191cf1", size = 45831 }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/36/f00e344d48ab0065b5d93692dcd6245f4400dc946140b1fdc56657deb5d8/pydantic_graph-2.59.0.tar.gz", hash = "sha256:f8cf18e18cdea6c6ee412017373c156e4fadc0b4b205c174d564d878d1765989", size = 46085 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/00/d9/55a8f09b6180e10a19d1d41b2f1b157b23d8a998d442cf28465c5a86bea2/pydantic_graph-2.57.0-py3-none-any.whl", hash = "sha256:4c65193a1d8b58e3c6f29a15cbe7b96e1e255a1670a5bcb9a323b8600fc1686a", size = 53274 },
+    { url = "https://files.pythonhosted.org/packages/e3/41/c55560304acbf4d9e3f9d55e9be424dfc486c8b65e9496c8a857efee3e17/pydantic_graph-2.59.0-py3-none-any.whl", hash = "sha256:cf8b699f7322690590345028191c7e5ced9e57606c026f2480f90dc9665f176f", size = 53275 },
 ]
 
 [[package]]
