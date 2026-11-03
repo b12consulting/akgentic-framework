@@ -8,8 +8,9 @@ description: Reviews a change against the acceptance criteria and the codebase's
 payload:
   description: Reviews a change against the acceptance criteria and the codebase's
     conventions and returns a verdict with file:line evidence. Reads the codebase,
-    edits the story file's review sections and Status, and has a sandboxed SHELL used only to RUN tests,
-    lint and type checks — never to fix code. Reviews directly, or runs a named workflow.
+    edits the story file's review sections and Status, and has a sandboxed SHELL used
+    only to RUN tests, lint and type checks — never to fix code. Reviews directly,
+    or runs a named workflow.
   agent_class: akgentic.agent.BaseAgent
   skills:
   - code-review
@@ -40,3 +41,6 @@ payload:
     - __ref__: id_team_specialist
     - __ref__: id_planning_member
     - __ref__: software-engineering-skills.id_skills_reviewer
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

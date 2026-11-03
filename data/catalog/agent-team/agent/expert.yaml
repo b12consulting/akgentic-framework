@@ -30,4 +30,4 @@ payload:
     - __ref__: global.id_knowledge_graph
     - __ref__: global.id_notification
     - __ref__: global.id_metadata
-    - __ref__: id_model_switch
+    - __ref__: global.id_model_switch

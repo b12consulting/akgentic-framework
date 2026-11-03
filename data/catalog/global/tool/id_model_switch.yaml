@@ -1,15 +1,16 @@
 id: id_model_switch
 kind: tool
-namespace: agent-team
+namespace: global
 user_id: anonymous
 model_type: akgentic.tool.model.ModelTool
-description: Runtime model switching — the roster, the switch, and the model in force
+description: Runtime model switching — the roster, the switch, and the model in force.
+  Shared by every team on global.id_model_roster_agent_team.
 payload:
   list_models: true
   switch_model:
     instructions: |
-      The roster is the gpt-6 series — gpt-6-luna (small/fast), gpt-6.1-sol (standard) and
-      gpt-6-astra (strongest) — plus the gpt-5.6 series and the older gpt-5.4, gpt-5.2 and
+      The roster is the gpt-6 series — gpt-6-luna (small/fast), gpt-6.1-terra (mid tier),
+      gpt-6.1-sol (standard) and gpt-6-astra (strongest) — plus the gpt-5.6 series and the older gpt-5.4, gpt-5.2 and
       gpt-4.1. Escalate to gpt-6.1-sol for a task needing deeper reasoning than the one in
       front of you is getting; drop to gpt-6-luna for bulk or routine work. gpt-6-astra is
       expensive: switch to it only when a human asks for it. Say which model you switched

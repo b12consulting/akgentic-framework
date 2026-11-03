@@ -35,3 +35,6 @@ payload:
     - __ref__: id_team_specialist
     - __ref__: id_planning_member
     - __ref__: software-engineering-skills.id_skills_qa
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

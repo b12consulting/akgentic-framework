@@ -35,3 +35,6 @@ payload:
     - __ref__: id_workspace_note
     - __ref__: id_knowledge_graph_ro
     - __ref__: id_team_member
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

@@ -3,13 +3,14 @@ kind: agent
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.core.AgentCard
-description: Implements the story task by task, keeps the File List current and
-  runs the tests.
+description: Implements the story task by task, keeps the File List current and runs
+  the tests.
 payload:
-  description: Implements the story task by task, keeps the File List current
-    and runs the tests. Full workspace read/write/edit AND a sandboxed SHELL — can
-    run git, pytest, ruff, mypy, npm and the other allowlisted commands, so this is
-    the role to use for cloning a repo, installing dependencies or running a suite. Answers directly, or runs a named workflow.
+  description: Implements the story task by task, keeps the File List current and
+    runs the tests. Full workspace read/write/edit AND a sandboxed SHELL — can run
+    git, pytest, ruff, mypy, npm and the other allowlisted commands, so this is the
+    role to use for cloning a repo, installing dependencies or running a suite. Answers
+    directly, or runs a named workflow.
   agent_class: akgentic.agent.BaseAgent
   skills:
   - implementation
@@ -40,3 +41,6 @@ payload:
     - __ref__: id_team_specialist
     - __ref__: id_planning_member
     - __ref__: software-engineering-skills.id_skills_developer
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

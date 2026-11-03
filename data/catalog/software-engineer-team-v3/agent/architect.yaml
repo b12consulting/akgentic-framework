@@ -8,8 +8,8 @@ description: Chooses the approach, states the alternative it rejected and why, a
 payload:
   description: Chooses the approach, states the alternative it rejected and why, and
     names the components and files the change lands in. Reads the codebase with glob
-    and grep, edits the story file's Dev Notes, and can search the web. Cannot edit source
-    code and has NO shell. Answers directly, or runs a named workflow.
+    and grep, edits the story file's Dev Notes, and can search the web. Cannot edit
+    source code and has NO shell. Answers directly, or runs a named workflow.
   agent_class: akgentic.agent.BaseAgent
   skills:
   - architecture
@@ -42,3 +42,6 @@ payload:
     - __ref__: id_team_specialist
     - __ref__: id_planning_member
     - __ref__: software-engineering-skills.id_skills_architect
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

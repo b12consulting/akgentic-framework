@@ -4,8 +4,8 @@ namespace: global
 user_id: anonymous
 model_type: akgentic.catalog.NativeValue
 description: |
-  Switchable model roster for Agent Team V1 — declared ONCE here and shared by @Manager,
-  @Assistant and @Expert, instead of the same three-ref list repeated on every agent.
+  Switchable model roster, first built for Agent Team V1 and now shared by every LLM agent of
+  every team in the catalog — declared ONCE here instead of repeated on every agent.
   Contents: the gpt-6 series (astra strongest, 6.1-sol standard, 6.1-terra mid tier, luna
   small/fast), the gpt-5.6 series (sol, terra, luna), gpt-5.4, gpt-5.2 and gpt-4.1
   (temperature 0.3). Order is listing order only — it does not pick the active model.

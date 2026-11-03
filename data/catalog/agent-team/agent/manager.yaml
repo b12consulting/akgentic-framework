@@ -20,7 +20,7 @@ payload:
         role: manager
         instructions: Coordinate the team effectively to achieve goals.
     model_cfg:
-      __ref__: global.id_gpt_61_sol
+      __ref__: global.id_gpt_61_terra
     model_roster:
       __ref__: global.id_model_roster_agent_team
     tools:
@@ -30,5 +30,5 @@ payload:
     - __ref__: global.id_knowledge_graph
     - __ref__: global.id_notification
     - __ref__: global.id_metadata
-    - __ref__: id_model_switch
     - __ref__: global.id_skills_deliverables
+    - __ref__: global.id_model_switch
