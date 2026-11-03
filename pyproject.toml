@@ -47,14 +47,14 @@ dependencies = [
 # Hand edits here are overwritten; change a submodule's version and re-run it.
 [project.optional-dependencies]
 core = ["akgentic-core==1.5.15"]
-llm = ["akgentic-llm==2.5.0"]
+llm = ["akgentic-llm==2.5.2"]
 tool = [
     "akgentic-core==1.5.15",
     "akgentic-tool==1.12.0",
 ]
 agent = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.5.0",
+    "akgentic-llm==2.5.2",
     "akgentic-tool==1.12.0",
     "akgentic-agent==1.8.1",
 ]
@@ -70,7 +70,7 @@ team = [
 ]
 infra = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.5.0",
+    "akgentic-llm==2.5.2",
     "akgentic-tool==1.12.0",
     "akgentic-agent==1.8.1",
     "akgentic-catalog==2.2.7",
@@ -80,7 +80,7 @@ infra = [
 # Every subpackage, no optional extras (lean install).
 all = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.5.0",
+    "akgentic-llm==2.5.2",
     "akgentic-tool==1.12.0",
     "akgentic-agent==1.8.1",
     "akgentic-catalog==2.2.7",
@@ -92,7 +92,7 @@ all = [
 # this pulls in.
 all-extras = [
     "akgentic-core==1.5.15",
-    "akgentic-llm==2.5.0",
+    "akgentic-llm==2.5.2",
     "akgentic-tool[docs,qdrant,vector-search,vision,weaviate]==1.12.0",
     "akgentic-agent==1.8.1",
     "akgentic-catalog[api,cli,mongo]==2.2.7",
