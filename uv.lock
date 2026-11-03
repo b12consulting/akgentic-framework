@@ -88,7 +88,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-framework"
-version = "2.19.0"
+version = "2.19.1"
 source = { editable = "." }
 dependencies = [
     { name = "akgentic-core" },
@@ -185,9 +185,9 @@ requires-dist = [
     { name = "akgentic-core", marker = "extra == 'postgres'", specifier = "==1.5.15" },
     { name = "akgentic-core", marker = "extra == 'team'", specifier = "==1.5.15" },
     { name = "akgentic-core", marker = "extra == 'tool'", specifier = "==1.5.15" },
-    { name = "akgentic-infra", marker = "extra == 'all'", specifier = "==1.16.0" },
-    { name = "akgentic-infra", marker = "extra == 'all-extras'", specifier = "==1.16.0" },
-    { name = "akgentic-infra", marker = "extra == 'infra'", specifier = "==1.16.0" },
+    { name = "akgentic-infra", marker = "extra == 'all'", specifier = "==1.17.0" },
+    { name = "akgentic-infra", marker = "extra == 'all-extras'", specifier = "==1.17.0" },
+    { name = "akgentic-infra", marker = "extra == 'infra'", specifier = "==1.17.0" },
     { name = "akgentic-llm", marker = "extra == 'agent'", specifier = "==2.5.2" },
     { name = "akgentic-llm", marker = "extra == 'all'", specifier = "==2.5.2" },
     { name = "akgentic-llm", marker = "extra == 'all-extras'", specifier = "==2.5.2" },
@@ -218,7 +218,7 @@ dev = [
 
 [[package]]
 name = "akgentic-infra"
-version = "1.16.0"
+version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-agent" },
@@ -241,9 +241,9 @@ dependencies = [
     { name = "websockets" },
     { name = "wsproto" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/88/593b92c878b07335f4825d80489150dd4845166a35cd08df0d508f2ca7fb/akgentic_infra-1.16.0.tar.gz", hash = "sha256:dd15cf617550def5b57e8aed87a7f24a9bbd258f8835f2500a4fc026c0df3740", size = 709219 }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/71/f31b31aec66229483470c32f6297fa5339a3275814a0258122f8dc474c3f/akgentic_infra-1.17.0.tar.gz", hash = "sha256:c3655efd091e5ba140952cd61d7caab37928fa58fa0aeab6434691cf6e270c4f", size = 718512 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/4e/fb6f86e0702d16ba78d7ee639bfbb449c9c69b875ff706e596b83cfd50c1/akgentic_infra-1.16.0-py3-none-any.whl", hash = "sha256:2877e9f6a1b6204453454a02c1466d5a15bb2a6d0688142dab8702662fb00b3e", size = 333381 },
+    { url = "https://files.pythonhosted.org/packages/7a/3f/17f2a64771dc1467334706d9d2ac2d6768eb39e5005b1459c54ccd483886/akgentic_infra-1.17.0-py3-none-any.whl", hash = "sha256:7c3f77c37a50e0f19eef9470c116099051dea5d0b8bd0666ebb4eb402af220db", size = 338357 },
 ]
 
 [[package]]
