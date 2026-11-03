@@ -24,3 +24,6 @@ payload:
     tools:
     - __ref__: id_team_disabled
     - __ref__: id_workspace_client_db
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

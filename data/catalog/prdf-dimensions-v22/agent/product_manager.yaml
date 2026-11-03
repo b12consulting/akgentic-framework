@@ -17,7 +17,7 @@ payload:
     prompt:
       __ref__: id_manager_prompt
     model_cfg:
-      __ref__: global.id_gpt_61_sol
+      __ref__: global.id_gpt_61_terra
     run_usage_limits:
       __ref__: id_run_limits_chair
     agent_usage_limits:
@@ -27,3 +27,6 @@ payload:
     - __ref__: id_planning
     - __ref__: id_team_chair
     - __ref__: id_workspace_chair
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team

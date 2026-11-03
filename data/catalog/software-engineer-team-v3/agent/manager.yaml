@@ -3,13 +3,15 @@ kind: agent
 namespace: software-engineer-team-v3
 user_id: anonymous
 model_type: akgentic.core.AgentCard
-description: Owns the delivery workflow, the stage gates and the story files, and holds
-  none of the technical content.
+description: Owns the delivery workflow, the stage gates and the story files, and
+  holds none of the technical content.
 payload:
   description: Owns the delivery workflow, the stage gates and the story files, and
     holds none of the technical content. Reads and writes the workspace including
-    the story files it creates under stories/, keeps the plan and the knowledge graph, and can hire. Has NO shell
-    — cannot run git, tests or any command. Runs the BMAD story workflow only when the work needs it; answers direct questions through a single task.
+    the story files it creates under stories/, keeps the plan and the knowledge graph,
+    and can hire. Has NO shell — cannot run git, tests or any command. Runs the BMAD
+    story workflow only when the work needs it; answers direct questions through a
+    single task.
   agent_class: akgentic.agent.BaseAgent
   skills:
   - workflow
@@ -30,7 +32,7 @@ payload:
     prompt:
       __ref__: id_manager_prompt
     model_cfg:
-      __ref__: id_gpt_61_sol_manager
+      __ref__: id_gpt_61_terra_manager
     run_usage_limits:
       __ref__: id_run_limits_manager
     agent_usage_limits:
@@ -41,3 +43,6 @@ payload:
     - __ref__: id_knowledge_graph
     - __ref__: id_team_manager
     - __ref__: software-engineering-skills.id_skills_manager
+    - __ref__: global.id_model_switch
+    model_roster:
+      __ref__: global.id_model_roster_agent_team
