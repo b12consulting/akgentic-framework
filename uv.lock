@@ -88,7 +88,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-framework"
-version = "2.18.2"
+version = "2.19.0"
 source = { editable = "." }
 dependencies = [
     { name = "akgentic-core" },
