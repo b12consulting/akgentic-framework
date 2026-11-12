@@ -88,7 +88,7 @@ wheels = [
 
 [[package]]
 name = "akgentic-framework"
-version = "2.18.1"
+version = "2.18.2"
 source = { editable = "." }
 dependencies = [
     { name = "akgentic-core" },
@@ -193,12 +193,12 @@ requires-dist = [
     { name = "akgentic-llm", marker = "extra == 'all-extras'", specifier = "==2.5.0" },
     { name = "akgentic-llm", marker = "extra == 'infra'", specifier = "==2.5.0" },
     { name = "akgentic-llm", marker = "extra == 'llm'", specifier = "==2.5.0" },
-    { name = "akgentic-team", marker = "extra == 'all'", specifier = "==1.11.0" },
-    { name = "akgentic-team", marker = "extra == 'catalog'", specifier = "==1.11.0" },
-    { name = "akgentic-team", marker = "extra == 'infra'", specifier = "==1.11.0" },
-    { name = "akgentic-team", marker = "extra == 'team'", specifier = "==1.11.0" },
-    { name = "akgentic-team", extras = ["cli", "mongo"], marker = "extra == 'all-extras'", specifier = "==1.11.0" },
-    { name = "akgentic-team", extras = ["postgres"], marker = "extra == 'postgres'", specifier = "==1.11.0" },
+    { name = "akgentic-team", marker = "extra == 'all'", specifier = "==1.11.1" },
+    { name = "akgentic-team", marker = "extra == 'catalog'", specifier = "==1.11.1" },
+    { name = "akgentic-team", marker = "extra == 'infra'", specifier = "==1.11.1" },
+    { name = "akgentic-team", marker = "extra == 'team'", specifier = "==1.11.1" },
+    { name = "akgentic-team", extras = ["cli", "mongo"], marker = "extra == 'all-extras'", specifier = "==1.11.1" },
+    { name = "akgentic-team", extras = ["postgres"], marker = "extra == 'postgres'", specifier = "==1.11.1" },
     { name = "akgentic-tool", marker = "extra == 'agent'", specifier = "==1.12.0" },
     { name = "akgentic-tool", marker = "extra == 'all'", specifier = "==1.12.0" },
     { name = "akgentic-tool", marker = "extra == 'catalog'", specifier = "==1.12.0" },
@@ -265,16 +265,16 @@ wheels = [
 
 [[package]]
 name = "akgentic-team"
-version = "1.11.0"
+version = "1.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "akgentic-core" },
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/54/02437b8a13f715d1f3eebfcba406555cf06468998d0cfb4499e64c948c2a/akgentic_team-1.11.0.tar.gz", hash = "sha256:3788b57cf8a18778a547ece5f30a08b70ec0ac0f6c62f5ce19258973d22e7a27", size = 384925 }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/d2/e1263f92a1c9c8f9734d2dc7added88cb9a9cba313adf0b7f96b4f005404/akgentic_team-1.11.1.tar.gz", hash = "sha256:a0cf05c5c6754a6409b1e41c27a7fb4f00bbad5613feb30ac7f8272233b02421", size = 385409 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/83/7a740287032e343998b2717efd6e7e7673049de53dbf086f853577635d9a/akgentic_team-1.11.0-py3-none-any.whl", hash = "sha256:b40611bddadaa23f6fa97bed498d1c4d268bc54264e17ab85ddc38137f1bff6b", size = 156797 },
+    { url = "https://files.pythonhosted.org/packages/86/ea/25f67eb1be61ff6132208871f11a45ead4d8597e4258809a7111a9ae2dac/akgentic_team-1.11.1-py3-none-any.whl", hash = "sha256:25d9b69046c4421fe9d2c66374dacb26d2dff0b200292021fe1547faa6a98765", size = 156922 },
 ]
 
 [package.optional-dependencies]
